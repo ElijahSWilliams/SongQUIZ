@@ -1,0 +1,40 @@
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  /* padding: 32px 0px 28px; */
+  font-family: "Cabinet Grotesk";
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 24px;
+  text-align: left;
+  background-color: rgb(128, 0, 128, 0.25);
+}
+
+.header__logo {
+  width: 100px;
+  height: 80px;
+  border-radius: 0px;
+}
+
+.header__login-btn {
+  background: none;
+  border: none;
+  width: 150px;
+  height: 70px;
+  color: white;
+  font-size: 20px;
+  cursor: pointer;
+  /* white-space: nowrap; */
+}
+
+.header__logout-btn {
+  background: none;
+  border: none;
+  width: 150px;
+  height: 70px;
+  color: white;
+  font-size: 20px;
+  cursor: pointer;
+  /* white-space: nowrap; */
+}
