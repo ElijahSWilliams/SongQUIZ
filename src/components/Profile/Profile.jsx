@@ -1,15 +1,21 @@
 import { useContext, useState } from "react";
 import "./Profile.css";
 import quizContext from "../../Context/QuizContext";
-import logOutModal from "../Modal/Modal";
+import LogOutModal from "../Modal/Modal";
 
-const Profile = ({ activeModal }) => {
+const Profile = () => {
   //import userContext
   const { isLoggedIn, setIsLoggedIn, currentUser, setCurrentUser } =
     useContext(quizContext);
+  const [activeModal, setActiveModal] = useState("");
 
   const handleOpenLogoutModal = () => {
+    console.log("Log Out Modal");
     setActiveModal("logout");
+  };
+
+  const handleCloseModal = () => {
+    setActiveModal("");
   };
 
   const handleLogOut = () => {
@@ -20,12 +26,18 @@ const Profile = ({ activeModal }) => {
     /* window.location.href = "/"; */ // Redirect to home/login page
   };
 
-  console.log(currentUser?.name);
+  //Modal
+
   return (
     <div className="profile">
-      <button className="profile__btn" onClick={handleLogOut}>
+      <button className="profile__btn" onClick={handleOpenLogoutModal}>
         {currentUser?.name}
       </button>
+      {/* Show when logout is active */}
+      <LogOutModal
+        activeModal={activeModal}
+        handleCloseModal={handleCloseModal}
+      />
     </div>
   );
 };
