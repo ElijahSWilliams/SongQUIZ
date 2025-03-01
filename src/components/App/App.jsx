@@ -5,13 +5,14 @@ import Entry from "../Entry/Entry";
 import Score from "../Score/Score";
 import Header from "../Header/Header";
 import { handleRedirect } from "../../utils/Auth";
+import Profile from "../Profile/Profile";
 
 function App() {
   const [score, setScore] = useState(0); //state for score
   const [isStarted, setIsStarted] = useState(); //context for quiz starting
   const [isLoggedIn, setIsLoggedIn] = useState(false); //logged in state
   const [authProcessed, setAuthProcessed] = useState(false);
-  const [currentUser, setCurrentUser] = useState(null);
+  const [currentUser, setCurrentUser] = useState({ name: "Elijah" });
 
   //functions
 
@@ -35,6 +36,7 @@ function App() {
         <Header />
 
         {/*  <Score /> */}
+
         <Entry />
       </div>
     </quizContext.Provider>

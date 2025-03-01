@@ -4,27 +4,24 @@ import quizContext from "../../Context/QuizContext";
 import headerLogo from "../../assets/musicLogo.jpg";
 import { useEffect } from "react";
 import { redirectAuth } from "../../utils/Auth";
+import Profile from "../Profile/Profile";
 const Header = () => {
   //VARIABLES AND STATES
   const { isLoggedIn, setIsLoggedIn, currentUser, setCurrentUser } =
     useContext(quizContext);
+  console.log(currentUser);
 
   //FUNCTIONS
   //Sign In Function . maybe pass a function to open a modal that for Spotifys Oauth
   const handleSignIn = () => {
     console.log("Logging In");
-    redirectAuth().then((res) => {
+
+    setIsLoggedIn(true);
+    console.log(currentUser);
+    /* redirectAuth().then((res) => {
       console.log(res);
       setCurrentUser(res);
-    });
-  };
-
-  const handleLogOut = () => {
-    console.log("logging out");
-    localStorage.removeItem("accessToken"); // If using localStorage
-    sessionStorage.removeItem("accessToken"); // If using sessionStorage
-    console.log("User logged out");
-    window.location.href = "/"; // Redirect to home/login page
+    }); */
   };
 
   //useEffect HOOKS
@@ -40,6 +37,17 @@ const Header = () => {
     }
   }, []);
 
+  {
+    /* <button
+          className="header__profile-btn"
+          onClick={() => {
+            handleLogOut();
+          }}
+        >
+          {currentUser.name}
+        </button> */
+  }
+
   ///
   return (
     <header className="header">
@@ -50,16 +58,7 @@ const Header = () => {
           Sign In With Spotify
         </button>
       ) : (
-        <button
-          className="header__logout-btn"
-          onClick={() => {
-            alert("LOGGED OUT");
-            setCurrentUser(null);
-            handleLogOut();
-          }}
-        >
-          Log Out
-        </button>
+        <Profile />
       )}
       {/* <button
         className="header__logout-btn"
