@@ -5,23 +5,26 @@ import headerLogo from "../../assets/musicLogo.jpg";
 import { useEffect } from "react";
 import { redirectAuth } from "../../utils/Auth";
 import Profile from "../Profile/Profile";
+import { getProfileInfo } from "../../utils/Api";
+import { Routes } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+
 const Header = () => {
   //VARIABLES AND STATES
   const { isLoggedIn, setIsLoggedIn, currentUser, setCurrentUser } =
     useContext(quizContext);
-  console.log(currentUser);
+
+  const navigate = useNavigate();
 
   //FUNCTIONS
   //Sign In Function . maybe pass a function to open a modal that for Spotifys Oauth
   const handleSignIn = () => {
     console.log("Logging In");
 
-    setIsLoggedIn(true);
-    console.log(currentUser);
-    /* redirectAuth().then((res) => {
+    //start Authentication Process
+    redirectAuth().then((res) => {
       console.log(res);
-      setCurrentUser(res);
-    }); */
+    });
   };
 
   //useEffect HOOKS
@@ -31,22 +34,41 @@ const Header = () => {
     console.log(token);
 
     if (token) {
-      setIsLoggedIn(true);
-    } else {
-      setIsLoggedIn(false);
+      getProfileInfo()
+        .then((userInfo) => {
+          console.log("userInfo:", userInfo);
+          setIsLoggedIn(true);
+          setCurrentUser(userInfo);
+          console.log(currentUser);
+          navigate("/");
+        })
+        .catch((err) => console.error(err));
+    } else if (!token) {
+      console.log("No Token Found");
     }
   }, []);
 
-  {
-    /* <button
-          className="header__profile-btn"
-          onClick={() => {
-            handleLogOut();
-          }}
-        >
-          {currentUser.name}
-        </button> */
-  }
+  useEffect(() => {
+    console.log("update currentUser:", currentUser);
+  }, [currentUser]);
+
+  /*   useEffect(() => {
+    const token = localStorage.getItem("jwt");
+
+    if (token) {
+      console.log("token found:", token);
+      checkToken(token)
+        .then((userData) => {
+          setCurrentUser(userData);
+          setIsLoggedIn(true);
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    } else if (!token) {
+      console.log("No Token Found");
+    }
+  }, []); */
 
   ///
   return (

@@ -1,7 +1,7 @@
 //File for all things AUTHORIZATION (OAUTH)
 import checkResponse from "./Api";
 import {
-  baseUrl,
+  authUrl,
   redirectURI,
   clientID,
   clientSecret,
@@ -12,7 +12,7 @@ import {
 //function to redirect user to spotify auth page
 const redirectAuth = () => {
   const authURL =
-    `${baseUrl}authorize?` + // Correct base URL: https://accounts.spotify.com/authorize
+    `${authUrl}authorize?` + // Correct auth URL: https://accounts.spotify.com/authorize
     `client_id=${clientID}` + // Your Spotify client ID
     `&response_type=${responseType}` + // response_type=code (for Authorization Code Flow)
     `&scope=${encodeURIComponent(scope)}` + // The scope, URL-encoded
@@ -22,6 +22,13 @@ const redirectAuth = () => {
 
   // Redirect to the Spotify authorization page
   window.location.href = authURL;
+};
+
+const checkForToken = (accessToken) => {
+  if (!accessToken) {
+    console.error("No Token Present");
+    return Promise.reject("No Token Found");
+  }
 };
 
 const handleRedirect = () => {
@@ -37,7 +44,7 @@ const handleRedirect = () => {
 };
 
 const tokenExchange = (authCode) => {
-  const response = fetch("https://accounts.spotify.com/api/token", {
+  return fetch("https://accounts.spotify.com/api/token", {
     method: "POST",
     headers: {
       "Content-Type": "application/x-www-form-urlencoded",
@@ -55,11 +62,12 @@ const tokenExchange = (authCode) => {
       return checkResponse(res);
     })
     .then((data) => {
+      console.log(data);
       if (data.access_token) {
-        accessToken = data.access_token;
-        refreshToken = data.refresh_token;
-        console.log(accessToken);
-        console.log(refreshToken);
+        localStorage.setItem("accessToken", data.access_token);
+        /*  localStorage.setItem("refreshToken", data.refresh_token); */
+        console.log("AccessToken:", data.access_token);
+        /*  console.log("RefreshToken:", data.refresh_token); */
       } else {
         console.error(data);
       }
@@ -69,4 +77,4 @@ const tokenExchange = (authCode) => {
     });
 };
 
-export { redirectAuth, handleRedirect };
+export { redirectAuth, handleRedirect, checkForToken };

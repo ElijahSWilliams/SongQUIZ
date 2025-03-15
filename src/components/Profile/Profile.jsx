@@ -9,6 +9,8 @@ const Profile = () => {
     useContext(quizContext);
   const [activeModal, setActiveModal] = useState("");
 
+  console.log("Profile:", currentUser);
+
   const handleOpenLogoutModal = () => {
     console.log("Log Out Modal");
     setActiveModal("logout");
@@ -19,11 +21,18 @@ const Profile = () => {
   };
 
   const handleLogOut = () => {
+    let token = localStorage.getItem("accessToken");
+
+    if (token) {
+      console.log(token);
+    } else {
+      console.log("No Token FOund");
+    }
     setCurrentUser("");
-    /*   localStorage.removeItem("accessToken"); // If using localStorage
-    sessionStorage.removeItem("accessToken"); // If using sessionStorage */
+    localStorage.removeItem("accessToken"); // If using localStorage
     console.log("User logged out");
-    /* window.location.href = "/"; */ // Redirect to home/login page
+    window.location.href = "/"; // Redirect to home page '/'. Try using router
+    handleCloseModal();
   };
 
   //Modal
@@ -31,12 +40,13 @@ const Profile = () => {
   return (
     <div className="profile">
       <button className="profile__btn" onClick={handleOpenLogoutModal}>
-        {currentUser?.name}
+        {currentUser?.display_name}
       </button>
       {/* Show when logout is active */}
       <LogOutModal
         activeModal={activeModal}
         handleCloseModal={handleCloseModal}
+        handleLogOut={handleLogOut}
       />
     </div>
   );

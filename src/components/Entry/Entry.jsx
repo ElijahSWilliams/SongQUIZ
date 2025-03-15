@@ -23,7 +23,7 @@ const Entry = () => {
         <button onClick={handleStartQuiz} className="entry__play-btn">
           {!isLoggedIn
             ? "Start Quiz (Guest Mode)"
-            : `Start Quiz as ${currentUser?.name}`}
+            : `Start Quiz as ${currentUser?.display_name}`}
         </button>
       ) : (
         //if started, render quiz
