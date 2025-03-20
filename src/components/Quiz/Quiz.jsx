@@ -1,18 +1,22 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useEffect } from "react";
 import "./Quiz.css";
 import { getSavedSongs } from "../../utils/Api";
+import quizContext from "../../Context/QuizContext";
 
 const Quiz = () => {
   //state Vars
   const [visible, setVisible] = useState(false);
-  const [isStarted, setIsStarted] = useState(false);
   const [songs, setSongs] = useState([]);
+  const [Question, setQuestion] = useState(1);
+
+  const { isStarted, setIsStarted } = useContext(quizContext);
 
   //Function
   const handleResetQuiz = (e) => {
     e.preventDefault();
     console.log("Reset");
+    console.log(e);
     setIsStarted(false);
   };
 
@@ -27,13 +31,12 @@ const Quiz = () => {
     }
   }, [isStarted]);
 
+  //get songs on load
   useEffect(() => {
     getSavedSongs().then((songs) => {
       if (songs) {
-        console.log(songs);
         setSongs(songs);
-        /* const songNames = songs.items.map((song) => song.track.name);
-        console.log("SONGS:", songNames); */
+        console.log(songs.map((song) => song.name));
       } else {
         console.error("No Songs Found");
       }
@@ -42,20 +45,18 @@ const Quiz = () => {
 
   return (
     <form className={`quiz ${visible ? "quiz__visible" : ""}`}>
-      <h1 className="quiz__header">Question 1</h1>
+      <h1 className="quiz__header">Question {Question}</h1>
 
       {songs.length > 0 ? (
         <ul className="quiz__options">
-          {songs.slice(0, 4).map((song) => {
-            //slice (0, 4) to get first four songs and then map them to a list element.
-            return (
-              //make sure to return
-              <li key={song?.track?.id}>
-                {/* get track name and artist name */}
-                {song?.track?.name} - {song?.track?.artists[0]?.name}{" "}
-              </li>
-            );
-          })}
+          {songs.slice(0, 4).map((song) => (
+            <li key={song?.track?.id}>
+              <label>
+                <input type="radio" name="quizOption" value={song?.track?.id} />
+                {song.name}
+              </label>
+            </li>
+          ))}
         </ul>
       ) : (
         <p className="quiz__options">Loading Songs...</p>

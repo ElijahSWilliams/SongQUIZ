@@ -52,7 +52,7 @@ const getSavedSongs = () => {
       return checkResponse(res);
     })
     .then((data) => {
-      console.log(data.items);
+      /*    console.log(data.items); */
       let songs = data.items.map((song) => {
         return {
           name: song.track.name,
@@ -60,7 +60,7 @@ const getSavedSongs = () => {
           id: song.track.id,
         };
       });
-      console.log("mapped Songs:", songs);
+      /*   console.log("mapped Songs:", songs); */
       return songs;
     })
     .catch((err) => {

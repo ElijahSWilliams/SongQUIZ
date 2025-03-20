@@ -19,7 +19,7 @@
 
 .quiz__visible {
   opacity: 1;
-  transform: scale(1);
+  /*   transform: scale(1); */
 }
 
 .quiz__header {
@@ -27,12 +27,20 @@
 }
 
 .quiz__reset-btn {
-  width: 25px;
+  width: 55px;
   height: 25px;
   position: relative;
-  top: 330px;
+  margin-top: 85px;
 }
 
 .quiz__options {
+  margin-top: 100px;
   list-style-type: none;
+}
+
+.quiz__options li {
+  margin-bottom: 5px;
+  margin-left: 300px;
+  display: flex;
+  align-items: center;
 }
