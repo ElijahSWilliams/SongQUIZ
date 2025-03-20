@@ -34,13 +34,13 @@
 }
 
 .quiz__options {
-  margin-top: 100px;
+  margin-top: 90px;
   list-style-type: none;
 }
 
 .quiz__options li {
-  margin-bottom: 5px;
-  margin-left: 300px;
+  margin-bottom: 15px;
+  margin-left: 270px;
   display: flex;
   align-items: center;
 }
