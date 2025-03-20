@@ -23,10 +23,11 @@ const Quiz = () => {
 
   const handleSubmitQuiz = (e) => {
     e.preventDefault();
-    console.log(answer);
+    alert(answer);
   };
 
   const handleAnswerSelect = (e) => {
+    console.log(e.target);
     const selection = e.target.value;
     console.log(selection);
     setAnswer(selection);
@@ -75,7 +76,7 @@ const Quiz = () => {
                 <input
                   type="radio"
                   name="quiz__option"
-                  value={song?.name}
+                  value={`${song?.name} - ${song?.artist}`}
                   onChange={handleAnswerSelect}
                 />
                 {song.name} - {song.artist}
