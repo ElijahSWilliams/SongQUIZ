@@ -69,7 +69,6 @@ const getSavedSongs = () => {
 };
 
 const playSong = (accessToken) => {
-  checkForToken(accessToken);
   return fetch(`${baseUrl}/me/player/play`, {
     method: "PUT",
     headers: {

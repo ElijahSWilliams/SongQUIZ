@@ -27,7 +27,6 @@ const Quiz = () => {
   };
 
   const handleAnswerSelect = (e) => {
-    console.log(e.target);
     const selection = e.target.value;
     console.log(selection);
     setAnswer(selection);
