@@ -1,9 +1,15 @@
 import "./Score.css";
 
-const Score = ({ score, totalQuestions }) => {
+const Score = () => {
+  const [score, setScore] = useState(0);
+
+  const handleUpdateScore = () => {
+    setScore((prevScore) => prevScore + 1);
+  };
+
   return (
     <div className="score">
-      <h1 className="score__title">Score:</h1>
+      <h1 className="score__title">Score:{score}</h1>
     </div>
   );
 };

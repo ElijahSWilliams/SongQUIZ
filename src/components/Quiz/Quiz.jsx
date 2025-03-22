@@ -3,6 +3,8 @@ import { useEffect } from "react";
 import "./Quiz.css";
 import { getSavedSongs } from "../../utils/Api";
 import quizContext from "../../Context/QuizContext";
+import Player from "../Player/Player";
+import { accessToken } from "../../utils/Constants";
 
 const Quiz = () => {
   //state Vars
@@ -66,6 +68,7 @@ const Quiz = () => {
       onSubmit={handleSubmitQuiz}
     >
       <h1 className="quiz__header">Question {Question}</h1>
+      <Player accessToken={accessToken} songs={songs} />
 
       {songs.length > 0 ? (
         <ul className="quiz__options">
