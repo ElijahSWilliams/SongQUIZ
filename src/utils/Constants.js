@@ -11,6 +11,6 @@ export const responseType = "code";
 export const accessToken = localStorage.getItem("accessToken"); //get token from local storage
 
 export const scope =
-  "user-library-read user-read-private user-read-email streaming";
+  "user-library-read user-read-private user-read-email user-read-playback-state user-modify-playback-state streaming";
 
 export const redirectURI = "http://localhost:2001/";

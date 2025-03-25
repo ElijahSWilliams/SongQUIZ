@@ -36,10 +36,10 @@ const Header = () => {
     if (token) {
       getProfileInfo()
         .then((userInfo) => {
-          console.log("userInfo:", userInfo);
+          /*     console.log("userInfo:", userInfo); */
           setIsLoggedIn(true);
           setCurrentUser(userInfo);
-          console.log(currentUser);
+          /*   console.log(currentUser); */
           navigate("/");
         })
         .catch((err) => console.error(err));
@@ -49,7 +49,7 @@ const Header = () => {
   }, []);
 
   useEffect(() => {
-    console.log("update currentUser:", currentUser);
+    /*  console.log("update currentUser:", currentUser); */
   }, [currentUser]);
 
   /*   useEffect(() => {

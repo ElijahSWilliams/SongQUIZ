@@ -28,8 +28,8 @@ const getProfileInfo = () => {
         return checkResponse(res);
       })
       .then((data) => {
-        console.log("Data:", data);
-        console.log("User Name:", data.display_name);
+        /*  console.log("Data:", data);
+        console.log("User Name:", data.display_name); */
         return data;
       });
   } else {
