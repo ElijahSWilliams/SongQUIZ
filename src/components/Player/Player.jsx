@@ -2,12 +2,14 @@ import "./Player.css";
 import checkResponse from "../../utils/Api";
 import { useEffect, useState } from "react";
 import { playFromBeginning } from "../../utils/Api";
+import { getRandomSong } from "../../utils/Constants";
 
 const Player = ({ accessToken, songs }) => {
   //State Variables
   const [player, setPlayer] = useState(null);
   const [isPlaying, setIsPlaying] = useState("");
   const [deviceID, setDeviceID] = useState(null);
+  const [correctSong, setCorrectSong] = useState(null);
 
   //UseEffect Hooks
 
@@ -65,13 +67,46 @@ const Player = ({ accessToken, songs }) => {
   }, [accessToken]); // Runs only if accessToken changes
   ///////////////END INITIALIZE PLAYER/////////////////////////////////////
 
-  const getRandomSong = (songs) => {
+  /* const getRandomSong = (songs) => {
     console.log("song list:", songs);
     const randomNumber = Math.floor(Math.random() * songs.length);
-    /*  console.log(randomNumber); */
     const songId = songs[randomNumber].id;
-    /* console.log(songId); */
     return `spotify:track:${songId}`; //create uri by prepending 'spotify:track:' to the tracks ID.
+  }; 
+ */
+
+  /*  const getRandomSong = (songs) => {
+    if (!songs || songs.length === 0) return null; // Safety check
+    const randomNumber = Math.floor(Math.random() * songs.length);
+    console.log(songs[randomNumber]);
+    return songs[randomNumber]; // Return the whole song object
+  };
+ */
+  const getQuizOptions = (songs, randomSong) => {
+    //create an array eith the correct song
+    const options = [randomSong];
+
+    // Get 3 other random songs that are not the correct answer
+    while (options.length < 4) {
+      //while there are less than 4 songs
+      const otherSong = getRandomSong(songs);
+      // Make sure we don't add the same song multiple times
+      if (!options.includes(otherSong)) {
+        options.push(otherSong);
+      }
+    }
+
+    // Shuffle the options so the correct answer isn't always in the same position
+    return shuffleArray(options);
+  };
+
+  //Function to shuffle answer choices
+  const shuffleArray = (array) => {
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]]; // Swap elements
+    }
+    return array;
   };
 
   // Function to handle play/pause functions
@@ -86,6 +121,7 @@ const Player = ({ accessToken, songs }) => {
       } else {
         //if not playing
         const randomSong = getRandomSong(songs); //get random song
+        setCorrectSong(randomSong);
         transferPlayback() //tranfer playback to web device
           .then(() => {
             // After the playback is transferred, resume with the random song

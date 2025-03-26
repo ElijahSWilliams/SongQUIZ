@@ -11,8 +11,26 @@ function App() {
   const [score, setScore] = useState(0); //state for score
   const [isStarted, setIsStarted] = useState(); //context for quiz starting
   const [isLoggedIn, setIsLoggedIn] = useState(false); //logged in state
-  const [authProcessed, setAuthProcessed] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
+
+  useEffect(() => {
+    // Check if there is an access token stored (indicating the user is logged in)
+    const token = localStorage.getItem("accessToken");
+
+    if (token) {
+      getProfileInfo()
+        .then((userInfo) => {
+          console.log("userInfo:", userInfo);
+          setIsLoggedIn(true);
+          setCurrentUser(userInfo);
+          /*   console.log(currentUser); */
+          navigate("/");
+        })
+        .catch((err) => console.error(err));
+    } else if (!token) {
+      console.log("No Token Found");
+    }
+  }, []);
 
   //functions
 
@@ -22,13 +40,13 @@ function App() {
   }, []);
 
   //useEffect to get user info
-  useEffect(() => {
-    let token = localStorage.getItem("accessToken");
-    /*  console.log(token); */
-    if (token) {
-      getProfileInfo();
-    }
-  }, []);
+  // useEffect(() => {
+  //   let token = localStorage.getItem("accessToken");
+  //   /*  console.log(token); */
+  //   if (token) {
+  //     getProfileInfo();
+  //   }
+  // }, [isLoggedIn]);
 
   return (
     <quizContext.Provider

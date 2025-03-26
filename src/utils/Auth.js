@@ -34,9 +34,8 @@ const checkForToken = (accessToken) => {
 const handleRedirect = () => {
   const params = new URLSearchParams(window.location.search);
   const authCode = params.get("code"); //code from url after redirection back to local app
-
+  console.log("authCod", authCode);
   if (authCode) {
-    console.log("authCode:", authCode);
     tokenExchange(authCode);
   } else {
     console.error("AUTH CODE NOT FOUND");
@@ -62,7 +61,7 @@ const tokenExchange = (authCode) => {
       return checkResponse(res);
     })
     .then((data) => {
-      console.log(data);
+      console.log("data", data);
       if (data.access_token) {
         localStorage.setItem("accessToken", data.access_token);
         /*  localStorage.setItem("refreshToken", data.refresh_token); */

@@ -28,29 +28,10 @@ const Header = () => {
   };
 
   //useEffect HOOKS
-  useEffect(() => {
-    // Check if there is an access token stored (indicating the user is logged in)
-    const token = localStorage.getItem("accessToken");
-    console.log(token);
 
-    if (token) {
-      getProfileInfo()
-        .then((userInfo) => {
-          /*     console.log("userInfo:", userInfo); */
-          setIsLoggedIn(true);
-          setCurrentUser(userInfo);
-          /*   console.log(currentUser); */
-          navigate("/");
-        })
-        .catch((err) => console.error(err));
-    } else if (!token) {
-      console.log("No Token Found");
-    }
-  }, []);
-
-  useEffect(() => {
-    /*  console.log("update currentUser:", currentUser); */
-  }, [currentUser]);
+  // useEffect(() => {
+  //   /*  console.log("update currentUser:", currentUser); */
+  // }, [currentUser]);
 
   /*   useEffect(() => {
     const token = localStorage.getItem("jwt");

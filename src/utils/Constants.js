@@ -14,3 +14,10 @@ export const scope =
   "user-library-read user-read-private user-read-email user-read-playback-state user-modify-playback-state streaming";
 
 export const redirectURI = "http://localhost:2001/";
+
+export const getRandomSong = (songs) => {
+  if (!songs || songs.length === 0) return null; // Safety check
+  const randomNumber = Math.floor(Math.random() * songs.length);
+  console.log(songs[randomNumber]);
+  return songs[randomNumber]; // Return the whole song object
+};
