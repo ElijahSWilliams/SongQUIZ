@@ -66,22 +66,7 @@ const Player = ({ accessToken, songs }) => {
   }, [accessToken]); // Runs only if accessToken changes
   ///////////////END INITIALIZE PLAYER/////////////////////////////////////
 
-  /* const getRandomSong = (songs) => {
-    console.log("song list:", songs);
-    const randomNumber = Math.floor(Math.random() * songs.length);
-    const songId = songs[randomNumber].id;
-    return `spotify:track:${songId}`; //create uri by prepending 'spotify:track:' to the tracks ID.
-  }; */
-
-  /*  const getRandomSong = (songs) => {
-    if (!songs || songs.length === 0) return null; // Safety check
-    const randomNumber = Math.floor(Math.random() * songs.length);
-    console.log(songs[randomNumber]);
-    return songs[randomNumber]; // Return the whole song object
-  };
- */
-
-  // Function to handle play/pause functions
+  // Function to handle playback
   const togglePlayBack = () => {
     if (player && deviceID) {
       console.log("player:", player, "Device ID:", deviceID);
@@ -102,6 +87,9 @@ const Player = ({ accessToken, songs }) => {
                 console.log("Song:", randomSong.songUri);
                 setIsPlaying(true);
               })
+              .then(() => {
+                handlePause();
+              })
               .catch((err) => console.error(err));
           })
           .catch((error) => {
@@ -110,6 +98,12 @@ const Player = ({ accessToken, songs }) => {
       }
       setIsPlaying(!isPlaying);
     }
+  };
+
+  const handlePause = () => {
+    setTimeout(() => {
+      player.pause();
+    }, 10000);
   };
   ///////////////////END PLAYBACK CONTROL FUNCTION///////////////////////////////////
   //
@@ -140,23 +134,6 @@ const Player = ({ accessToken, songs }) => {
       });
   };
 
-  const playRandomSong = (randomSong) => {
-    //check for active device and player
-    if (!deviceID || !player) {
-      console.log("No Device:", deviceID, "No Player:", player);
-      return;
-    }
-    //api call
-    playFromBeginning(accessToken, deviceID, randomSong)
-      .then((data) => {
-        setIsPlaying(true);
-        console.log(data);
-      })
-      .catch((err) => {
-        console.err(err);
-      });
-  };
-
   return (
     <div className="controls">
       {/*  <button onClick={() => player?.previousTrack()}>&laquo; Prev</button> */}
@@ -164,6 +141,7 @@ const Player = ({ accessToken, songs }) => {
         className="player__playback-btn"
         type="button"
         onClick={togglePlayBack}
+        disabled={isPlaying}
       >
         {isPlaying ? "Pause" : "Play"}
       </button>
