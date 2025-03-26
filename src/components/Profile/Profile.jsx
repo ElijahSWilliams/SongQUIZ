@@ -9,8 +9,6 @@ const Profile = () => {
     useContext(quizContext);
   const [activeModal, setActiveModal] = useState("");
 
-  console.log("Profile:", currentUser);
-
   const handleOpenLogoutModal = () => {
     console.log("Log Out Modal");
     setActiveModal("logout");

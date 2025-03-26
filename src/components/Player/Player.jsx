@@ -1,6 +1,7 @@
 import "./Player.css";
 import checkResponse from "../../utils/Api";
 import { useEffect, useState } from "react";
+import { playFromBeginning } from "../../utils/Api";
 
 const Player = ({ accessToken, songs }) => {
   //State Variables
@@ -37,6 +38,7 @@ const Player = ({ accessToken, songs }) => {
 
       spotifyPlayer.addListener("player_state_changed", (state) => {
         console.log("Player state changed:", state);
+        console.log("Sate:", state.context.uri);
       });
 
       spotifyPlayer.addListener("initialization_error", ({ message }) => {
@@ -61,29 +63,48 @@ const Player = ({ accessToken, songs }) => {
       console.error("Spotify SDK not loaded yet.");
     }
   }, [accessToken]); // Runs only if accessToken changes
+  ///////////////END INITIALIZE PLAYER/////////////////////////////////////
+
+  const getRandomSong = (songs) => {
+    console.log("song list:", songs);
+    const randomNumber = Math.floor(Math.random() * songs.length);
+    /*  console.log(randomNumber); */
+    const songId = songs[randomNumber].id;
+    /* console.log(songId); */
+    return `spotify:track:${songId}`; //create uri by prepending 'spotify:track:' to the tracks ID.
+  };
 
   // Function to handle play/pause functions
   const togglePlayBack = () => {
     if (player && deviceID) {
       console.log("player:", player, "Device ID:", deviceID);
       if (isPlaying) {
-        player.pause();
+        player.pause().then(() => {
+          console.log("Paused!");
+          setIsPlaying(false);
+        });
       } else {
-        const randomSong = getRandomSong(songs);
-        transferPlayback();
-        player.resume({ uris: [randomSong] });
+        //if not playing
+        const randomSong = getRandomSong(songs); //get random song
+        transferPlayback() //tranfer playback to web device
+          .then(() => {
+            // After the playback is transferred, resume with the random song
+            playFromBeginning(accessToken, deviceID, randomSong)
+              .then(() => {
+                console.log("Song:", randomSong);
+                setIsPlaying(true);
+              })
+              .catch((err) => console.error(err));
+          })
+          .catch((error) => {
+            console.error("Error transferring playback:", error);
+          });
       }
       setIsPlaying(!isPlaying);
     }
   };
-
-  //genertate a random song
-  const getRandomSong = (songs) => {
-    const randomNumber = Math.floor(Math.random() * songs.length);
-    const songId = songs[randomNumber].id;
-    /*     console.log(songId); */
-    return `spotify:track:${songId}`; //create uri by prepending 'spotify:track:' to the tracks ID.
-  };
+  ///////////////////END PLAYBACK CONTROL FUNCTION///////////////////////////////////
+  //
 
   //Transfer playback to current device
   const transferPlayback = () => {
@@ -97,7 +118,10 @@ const Player = ({ accessToken, songs }) => {
         Authorization: `Bearer ${accessToken}`,
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ device_ids: [deviceID], play: true }),
+      body: JSON.stringify({
+        device_ids: [deviceID],
+        play: false,
+      }),
     })
       .then((res) => {
         console.log(res);
@@ -105,6 +129,23 @@ const Player = ({ accessToken, songs }) => {
       })
       .catch((err) => {
         console.log("error tranferring playback:", err);
+      });
+  };
+
+  const playRandomSong = (randomSong) => {
+    //check for active device and player
+    if (!deviceID || !player) {
+      console.log("No Device:", deviceID, "No Player:", player);
+      return;
+    }
+    //api call
+    playFromBeginning(accessToken, deviceID, randomSong)
+      .then((data) => {
+        setIsPlaying(true);
+        console.log(data);
+      })
+      .catch((err) => {
+        console.err(err);
       });
   };
 

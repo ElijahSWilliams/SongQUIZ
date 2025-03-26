@@ -83,4 +83,28 @@ const playSong = (accessToken) => {
     })
     .catch((err) => console.error(err));
 };
-export { getProfileInfo, getSavedSongs, playSong };
+
+const playFromBeginning = (accessToken, deviceID, randomSong) => {
+  return fetch(
+    `https://api.spotify.com/v1/me/player/play?device_id=${deviceID}`,
+    {
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        uris: [randomSong], //play random song
+        position_ms: 0, //start song from beginning
+      }),
+    }
+  )
+    .then((res) => {
+      return checkResponse(res);
+    })
+    .catch((err) => {
+      console.error(err);
+    });
+};
+
+export { getProfileInfo, getSavedSongs, playSong, playFromBeginning };
