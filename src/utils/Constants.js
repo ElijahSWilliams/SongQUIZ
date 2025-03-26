@@ -18,6 +18,9 @@ export const redirectURI = "http://localhost:2001/";
 export const getRandomSong = (songs) => {
   if (!songs || songs.length === 0) return null; // Safety check
   const randomNumber = Math.floor(Math.random() * songs.length);
-  console.log(songs[randomNumber]);
-  return songs[randomNumber]; // Return the whole song object
+  const song = songs[randomNumber];
+  const songUri = `spotify:track:${song.id}`;
+  console.log(song.id);
+  console.log(songUri);
+  return { song, songUri }; // Return the whole song object and the uri for playback
 };

@@ -38,15 +38,16 @@ const Quiz = () => {
   //function to get other answer choices
   const getQuizOptions = (songs, randomSong) => {
     //create an array eith the correct song
-    const options = [randomSong];
+    const options = [`${randomSong.song.name} - ${randomSong.song.artist}`]; //set song name and artist
     console.log(options);
     // Get 3 other random songs that are not the correct answer
     while (options.length < 4) {
       //while there are less than 4 songs
       const otherSong = getRandomSong(songs);
+      const otherSongText = `${otherSong.song.name} - ${otherSong.song.artist}`; //get song name and artist
       // Make sure we don't add the same song multiple times
-      if (!options.includes(otherSong)) {
-        options.push(otherSong);
+      if (!options.includes(otherSongText)) {
+        options.push(otherSongText);
       }
     }
 
@@ -81,15 +82,15 @@ const Quiz = () => {
       if (songs && songs.length > 4) {
         //ensure we have more than 4 songs
         setSongs(songs);
-        /* console.log(
+        console.log(
           "Songs",
           songs.map((song) => song)
         );
-        console.log(songs.map((song) => song.name)); */
+        console.log(songs.map((song) => song.name));
         /*  console.log(songs.map((song) => song.artist)); */
         const randomSong = getRandomSong(songs);
         const options = getQuizOptions(songs, randomSong);
-
+        console.log(randomSong.songUri);
         setAnswer(randomSong);
         setAnswerChoices(options);
       } else {
@@ -117,7 +118,7 @@ const Quiz = () => {
                   value={`${song?.name} - ${song?.artist}`}
                   onChange={handleAnswerSelect}
                 />
-                {song.name} - {song.artist}
+                {song}
               </label>
             </li>
           ))}
