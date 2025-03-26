@@ -13,8 +13,7 @@ export default function checkResponse(res) {
 }
 
 const getProfileInfo = () => {
-  console.log("Get Profile Running");
-  console.log(accessToken);
+  /* console.log(accessToken); */
 
   if (accessToken) {
     return fetch(`${baseUrl}/me`, {

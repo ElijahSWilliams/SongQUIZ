@@ -55,7 +55,7 @@ const Quiz = () => {
           songs.map((song) => song)
         );
         console.log(songs.map((song) => song.name));
-        console.log(songs.map((song) => song.artist));
+        /*  console.log(songs.map((song) => song.artist)); */
       } else {
         console.error("No Songs Found");
       }

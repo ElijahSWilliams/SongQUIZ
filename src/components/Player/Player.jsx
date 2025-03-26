@@ -3,17 +3,12 @@ import checkResponse from "../../utils/Api";
 import { useEffect, useState } from "react";
 
 const Player = ({ accessToken, songs }) => {
+  //State Variables
   const [player, setPlayer] = useState(null);
   const [isPlaying, setIsPlaying] = useState("");
   const [deviceID, setDeviceID] = useState(null);
 
-  //genertate a random song
-  const getRandomSong = (songs) => {
-    const randomNumber = Math.floor(Math.random() * songs.length);
-    const songId = songs[randomNumber].id;
-    /*     console.log(songId); */
-    return `spotify:track:${songId}`; //create uri by prepending 'spotify:track:' to the tracks ID.
-  };
+  //UseEffect Hooks
 
   //initalize the player
   useEffect(() => {
@@ -26,16 +21,12 @@ const Player = ({ accessToken, songs }) => {
         robustness: "max",
       });
 
-      setPlayer((prev) => {
-        spotifyPlayer;
-      });
+      setPlayer(spotifyPlayer);
 
       // web player event listeners
       spotifyPlayer.addListener("ready", ({ device_id }) => {
         console.log("Player is ready with Device ID:", device_id);
-        setDeviceID((prev) => {
-          device_id;
-        });
+        setDeviceID(device_id);
 
         transferPlayback(); //automatically transfer playback when player sends 'ready' event
       });
@@ -48,6 +39,19 @@ const Player = ({ accessToken, songs }) => {
         console.log("Player state changed:", state);
       });
 
+      spotifyPlayer.addListener("initialization_error", ({ message }) => {
+        console.error(message);
+      });
+
+      spotifyPlayer.addListener("authentication_error", ({ message }) => {
+        console.error(message);
+      });
+
+      spotifyPlayer.addListener("account_error", ({ message }) => {
+        console.error(message);
+      });
+
+      //call connect to
       spotifyPlayer.connect().then((success) => {
         if (success) {
           console.log("Player Connected!");
@@ -58,12 +62,28 @@ const Player = ({ accessToken, songs }) => {
     }
   }, [accessToken]); // Runs only if accessToken changes
 
-  useEffect(() => {
-    if (deviceID) {
-      console.log(deviceID);
-      console.log(player);
+  // Function to handle play/pause functions
+  const togglePlayBack = () => {
+    if (player && deviceID) {
+      console.log("player:", player, "Device ID:", deviceID);
+      if (isPlaying) {
+        player.pause();
+      } else {
+        const randomSong = getRandomSong(songs);
+        transferPlayback();
+        player.resume({ uris: [randomSong] });
+      }
+      setIsPlaying(!isPlaying);
     }
-  });
+  };
+
+  //genertate a random song
+  const getRandomSong = (songs) => {
+    const randomNumber = Math.floor(Math.random() * songs.length);
+    const songId = songs[randomNumber].id;
+    /*     console.log(songId); */
+    return `spotify:track:${songId}`; //create uri by prepending 'spotify:track:' to the tracks ID.
+  };
 
   //Transfer playback to current device
   const transferPlayback = () => {
@@ -77,45 +97,15 @@ const Player = ({ accessToken, songs }) => {
         Authorization: `Bearer ${accessToken}`,
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ device_ids: [deviceID], play: false }),
+      body: JSON.stringify({ device_ids: [deviceID], play: true }),
     })
       .then((res) => {
         console.log(res);
-        return checkResponse(res);
+        return res.json();
       })
       .catch((err) => {
         console.log("error tranferring playback:", err);
       });
-  };
-
-  //start and stop playback
-  const togglePlayBack = () => {
-    //check for active player and deviceId
-    if (!player || !deviceID) {
-      console.log("player:", player);
-      console.log("deviceID:", deviceID);
-      console.log("Waiting for player...");
-      return; //end function execution
-    }
-
-    if (player) {
-      //get random song if player isnt null
-      console.log("READY");
-      const randomSong = getRandomSong(songs);
-      if (!isPlaying) {
-        setIsPlaying(true);
-        player.togglePlay({ uris: [randomSong] }).then(() => {
-          console.log(randomSong);
-          console.log("Playing!");
-        });
-      }
-      if (isPlaying) {
-        setIsPlaying(false);
-        player.pause().then(() => {
-          console.log("Paused!");
-        });
-      }
-    }
   };
 
   return (

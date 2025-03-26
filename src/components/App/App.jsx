@@ -24,7 +24,7 @@ function App() {
   //useEffect to get user info
   useEffect(() => {
     let token = localStorage.getItem("accessToken");
-    console.log(token);
+    /*  console.log(token); */
     if (token) {
       getProfileInfo();
     }
