@@ -31,49 +31,64 @@ const checkForToken = (accessToken) => {
   }
 };
 
-const handleRedirect = () => {
+const handleRedirect = async () => {
   const params = new URLSearchParams(window.location.search);
-  const authCode = params.get("code"); //code from url after redirection back to local app
-  console.log("authCod", authCode);
-  if (authCode) {
-    tokenExchange(authCode);
-  } else {
-    console.error("AUTH CODE NOT FOUND");
+  const code = params.get("code");
+
+  if (!code) return null;
+
+  try {
+    const tokenData = await tokenExchange(code); // this gets access_token
+    localStorage.setItem("accessToken", tokenData.access_token);
+
+    const userInfo = await getProfileInfo();
+
+    // Clean URL
+    window.history.replaceState({}, document.title, "/");
+
+    return userInfo;
+  } catch (error) {
+    console.error("Error during token exchange:", error);
+    return null;
   }
 };
 
-const tokenExchange = (authCode) => {
-  return fetch("https://accounts.spotify.com/api/token", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/x-www-form-urlencoded",
-      Authorization: "Basic " + btoa(`${clientID}:${clientSecret}`), //base64 encoding. 'btoa' converts a string to base64 encoding
-    },
-    body: new URLSearchParams({
-      code: authCode, //AUTHORIZATION CODE
-      redirect_uri: redirectURI,
-      grant_type: "authorization_code",
-      client_id: clientID,
-      client_secret: clientSecret,
-    }),
-  })
-    .then((res) => {
-      return checkResponse(res);
-    })
-    .then((data) => {
-      console.log("data", data);
-      if (data.access_token) {
-        localStorage.setItem("accessToken", data.access_token);
-        /*  localStorage.setItem("refreshToken", data.refresh_token); */
-        console.log("AccessToken:", data.access_token);
-        /*  console.log("RefreshToken:", data.refresh_token); */
-      } else {
-        console.error(data);
-      }
-    })
-    .catch((err) => {
-      console.error(err);
+const tokenExchange = async (authCode) => {
+  try {
+    const response = await fetch("https://accounts.spotify.com/api/token", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        Authorization: "Basic " + btoa(`${clientID}:${clientSecret}`),
+      },
+      body: new URLSearchParams({
+        code: authCode,
+        redirect_uri: redirectURI, // Ensure this matches the URL where you're expecting the code
+        grant_type: "authorization_code",
+      }),
     });
+
+    const data = await checkResponse(response);
+
+    if (data && data.access_token) {
+      localStorage.setItem("accessToken", data.access_token);
+      console.log("AccessToken:", data.access_token);
+
+      // After receiving the token, clear the URL's query parameters
+      window.history.pushState({}, document.title, window.location.pathname); // This should clean up the URL
+
+      // Redirect to the home page
+      window.location.replace("/"); // Redirects to the home page
+
+      return data;
+    } else {
+      console.error("Error: No access token received");
+      return null;
+    }
+  } catch (err) {
+    console.error("Token exchange failed:", err);
+    return null;
+  }
 };
 
 export { redirectAuth, handleRedirect, checkForToken };

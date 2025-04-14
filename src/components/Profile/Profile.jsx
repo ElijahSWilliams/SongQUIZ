@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import "./Profile.css";
 import quizContext from "../../Context/QuizContext";
 import LogOutModal from "../Modal/Modal";

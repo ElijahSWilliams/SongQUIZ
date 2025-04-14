@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import "./Header.css";
 import quizContext from "../../Context/QuizContext";
 import headerLogo from "../../assets/musicLogo.jpg";
@@ -13,67 +13,76 @@ const Header = () => {
   //VARIABLES AND STATES
   const { isLoggedIn, setIsLoggedIn, currentUser, setCurrentUser } =
     useContext(quizContext);
+  console.log(currentUser);
+  const [loading, setLoading] = useState(true); //inital stage for page load
 
   const navigate = useNavigate();
 
   //FUNCTIONS
   //Sign In Function . maybe pass a function to open a modal that for Spotifys Oauth
   const handleSignIn = () => {
-    console.log("Logging In");
+    console.log("Logging In:", isLoggedIn);
 
     //start Authentication Process
     redirectAuth().then((res) => {
-      console.log(res);
+      setIsLoggedIn(true);
+      //call getProfile
+      getProfileInfo().then((userInfo) => {
+        console.log(userInfo);
+        setCurrentUser(userInfo);
+        setLoading(false);
+      });
     });
   };
 
   //useEffect HOOKS
-
-  // useEffect(() => {
-  //   /*  console.log("update currentUser:", currentUser); */
-  // }, [currentUser]);
-
-  /*   useEffect(() => {
-    const token = localStorage.getItem("jwt");
-
-    if (token) {
-      console.log("token found:", token);
-      checkToken(token)
-        .then((userData) => {
-          setCurrentUser(userData);
-          setIsLoggedIn(true);
-        })
-        .catch((err) => {
-          console.error(err);
-        });
-    } else if (!token) {
-      console.log("No Token Found");
-    }
-  }, []); */
-
   ///
-  return (
-    <header className="header">
-      <img className="header__logo" src={headerLogo} />
+  useEffect(() => {
+    const token = localStorage.getItem("accessToken"); //retrieve token
+    if (token) {
+      setIsLoggedIn(true);
+      getProfileInfo()
+        .then((userInfo) => {
+          setCurrentUser(userInfo);
+          console.log("CurrentUSER:", userInfo);
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    } else {
+      setLoading(false);
+    }
+  }, []);
+  /* 
+  useEffect(() => {
+    let logoutTimer;
 
-      {!isLoggedIn ? (
-        <button className="header__login-btn" onClick={handleSignIn}>
-          Sign In With Spotify
-        </button>
-      ) : (
-        <Profile />
+    if (isLoggedIn) {
+      logoutTimer = setTimeout(() => {
+        signOut();
+      }, 60 * 60 * 1000); // 1 hour
+    }
+
+    return () => clearTimeout(logoutTimer); // Cleanup
+  }, [isLoggedIn]); */
+
+  if (loading) return null; //early exit if data is still loading
+
+  return (
+    <>
+      {loading ? null : (
+        <header className="header">
+          <img className="header__logo" src={headerLogo} />
+          {!isLoggedIn ? (
+            <button className="header__login-btn" onClick={handleSignIn}>
+              Sign In With Spotify
+            </button>
+          ) : (
+            <Profile />
+          )}
+        </header>
       )}
-      {/* <button
-        className="header__logout-btn"
-        onClick={() => {
-          alert("LOGGED OUT");
-          setCurrentUser(null);
-          handleLogOut();
-        }}
-      >
-        Log Out
-      </button> */}
-    </header>
+    </>
   );
 };
 

@@ -5,48 +5,43 @@ import Entry from "../Entry/Entry";
 import Score from "../Score/Score";
 import Header from "../Header/Header";
 import { handleRedirect } from "../../utils/Auth";
-import Profile from "../Profile/Profile";
 import { getProfileInfo } from "../../utils/Api";
+import { useNavigate } from "react-router-dom";
+
 function App() {
-  const [score, setScore] = useState(0); //state for score
-  const [isStarted, setIsStarted] = useState(); //context for quiz starting
-  const [isLoggedIn, setIsLoggedIn] = useState(false); //logged in state
+  const [score, setScore] = useState(0);
+  const [isStarted, setIsStarted] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
 
-  useEffect(() => {
-    // Check if there is an access token stored (indicating the user is logged in)
-    const token = localStorage.getItem("accessToken");
+  const navigate = useNavigate();
 
-    if (token) {
-      getProfileInfo()
-        .then((userInfo) => {
-          console.log("userInfo:", userInfo);
+  useEffect(() => {
+    const checkAuth = async () => {
+      const token = localStorage.getItem("accessToken");
+
+      if (!token) {
+        // We're likely being redirected with a ?code from Spotify
+        const userInfo = await handleRedirect();
+        if (userInfo) {
           setIsLoggedIn(true);
           setCurrentUser(userInfo);
-          /*   console.log(currentUser); */
           navigate("/");
-        })
-        .catch((err) => console.error(err));
-    } else if (!token) {
-      console.log("No Token Found");
-    }
+        }
+      } else {
+        // Already signed in
+        try {
+          const userInfo = await getProfileInfo();
+          setIsLoggedIn(true);
+          setCurrentUser(userInfo);
+        } catch (err) {
+          console.error("Token exists but user fetch failed:", err);
+        }
+      }
+    };
+
+    checkAuth(); //call checkAuth
   }, []);
-
-  //functions
-
-  //useEffect to get auth code from url after authorization
-  useEffect(() => {
-    handleRedirect();
-  }, []);
-
-  //useEffect to get user info
-  // useEffect(() => {
-  //   let token = localStorage.getItem("accessToken");
-  //   /*  console.log(token); */
-  //   if (token) {
-  //     getProfileInfo();
-  //   }
-  // }, [isLoggedIn]);
 
   return (
     <quizContext.Provider
@@ -61,9 +56,7 @@ function App() {
     >
       <div className="page">
         <Header />
-
-        {/*  <Score /> */}
-
+        {/* <Score /> */}
         <Entry />
       </div>
     </quizContext.Provider>

@@ -4,29 +4,44 @@ import "./Quiz.css";
 import { getSavedSongs } from "../../utils/Api";
 import quizContext from "../../Context/QuizContext";
 import Player from "../Player/Player";
-import { accessToken } from "../../utils/Constants";
+import { accessToken, stopPlayback } from "../../utils/Constants";
 import { getRandomSong } from "../../utils/Constants";
 
-const Quiz = () => {
+const Quiz = ({ player }) => {
   //state Vars
   const [visible, setVisible] = useState(false);
   const [songs, setSongs] = useState([]);
   const [Question, setQuestion] = useState(1);
   const [answer, setAnswer] = useState("");
   const [answerChoices, setAnswerChoices] = useState(null);
+  const [score, setScore] = useState(0);
   const { isStarted, setIsStarted } = useContext(quizContext);
 
   //Functions
   const handleResetQuiz = (e) => {
     e.preventDefault();
     console.log("Reset");
-    console.log(e);
+
     setIsStarted(false);
   };
 
   const handleSubmitQuiz = (e) => {
     e.preventDefault();
     alert(answer);
+
+    //check for correct answer
+    if (answer === `${song.name} - ${song.artist}`) {
+      setScore((prevScore) => prevScore + 1); //increment score
+    }
+    //progress thru quiz
+    if (Question < 5) {
+      setQuestion(Question + 1); // Move to the next question
+      loadNewQuestion(); // Load new song and answer choices
+      setAnswer(""); // Reset selected answer
+    } else {
+      alert(`Quiz finished! Your score is: ${score}`);
+      setIsStarted(false); // End the quiz
+    }
   };
 
   const handleAnswerSelect = (e) => {
@@ -64,6 +79,8 @@ const Quiz = () => {
     return array;
   };
 
+  //
+
   /////END FUNCTIONS ///////////
   //fade in animation
   useEffect(() => {
@@ -79,6 +96,8 @@ const Quiz = () => {
   //get songs on load
   useEffect(() => {
     getSavedSongs().then((songs) => {
+      const getRandomItem = (song) =>
+        song[Math.floor(Math.random() * song.length)];
       if (songs && songs.length > 4) {
         //ensure we have more than 4 songs
         setSongs(songs);
@@ -87,11 +106,11 @@ const Quiz = () => {
           songs.map((song) => song)
         );
         console.log(songs.map((song) => song.name));
-        /*  console.log(songs.map((song) => song.artist)); */
         const randomSong = getRandomSong(songs);
         const options = getQuizOptions(songs, randomSong);
-        console.log(randomSong.songUri);
-        setAnswer(randomSong);
+        console.log("RANDOM SONG", randomSong);
+        console.log("Options", options);
+        setAnswer(randomSong.song);
         setAnswerChoices(options);
       } else {
         console.error("No Songs Found");
@@ -115,7 +134,7 @@ const Quiz = () => {
                 <input
                   type="radio"
                   name="quiz__option"
-                  value={`${song?.name} - ${song?.artist}`}
+                  value={`${song} `}
                   onChange={handleAnswerSelect}
                 />
                 {song}

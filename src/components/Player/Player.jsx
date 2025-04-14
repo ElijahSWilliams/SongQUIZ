@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { playFromBeginning } from "../../utils/Api";
 import { getRandomSong } from "../../utils/Constants";
 
-const Player = ({ accessToken, songs }) => {
+const Player = ({ accessToken, songs, onPlayerReady }) => {
   //State Variables
   const [player, setPlayer] = useState(null);
   const [isPlaying, setIsPlaying] = useState("");
@@ -19,7 +19,7 @@ const Player = ({ accessToken, songs }) => {
       const spotifyPlayer = new window.Spotify.Player({
         name: "Song Quiz",
         getOAuthToken: (cb) => cb(accessToken),
-        volume: 1,
+        volume: 0.5,
         robustness: "max",
       });
 
@@ -58,6 +58,7 @@ const Player = ({ accessToken, songs }) => {
       spotifyPlayer.connect().then((success) => {
         if (success) {
           console.log("Player Connected!");
+          onPlayerReady(spotifyPlayer); //pass as prop to quiz component
         }
       });
     } else {
@@ -84,7 +85,11 @@ const Player = ({ accessToken, songs }) => {
             // After the playback is transferred, resume with the random song
             playFromBeginning(accessToken, deviceID, randomSong)
               .then(() => {
-                console.log("Song:", randomSong.songUri);
+                console.log(
+                  "Currently Playing:",
+                  randomSong.songUri,
+                  randomSong
+                );
                 setIsPlaying(true);
               })
               .then(() => {

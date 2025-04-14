@@ -20,7 +20,11 @@ export const getRandomSong = (songs) => {
   const randomNumber = Math.floor(Math.random() * songs.length);
   const song = songs[randomNumber];
   const songUri = `spotify:track:${song.id}`;
-  console.log(song.id);
-  console.log(songUri);
+  /* console.log(song);
+  console.log(songUri); */
   return { song, songUri }; // Return the whole song object and the uri for playback
+};
+
+export const stopPlayback = () => {
+  player.pause();
 };
