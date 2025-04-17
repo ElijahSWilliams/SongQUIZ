@@ -7,7 +7,7 @@ import Player from "../Player/Player";
 import { accessToken, stopPlayback } from "../../utils/Constants";
 import { getRandomSong } from "../../utils/Constants";
 
-const Quiz = ({ player }) => {
+const Quiz = () => {
   //state Vars
   const [visible, setVisible] = useState(false);
   const [songs, setSongs] = useState([]);
@@ -94,10 +94,9 @@ const Quiz = ({ player }) => {
     const fetchSongs = async () => {
       try {
         const songs = await getSavedSongs();
-        if (songs && songs.length > 4) {
-          const getRandomSong = (songList) =>
-            songList[Math.floor(Math.random() * songList.length)];
+        if (!songs) return;
 
+        if (songs && songs.length > 4) {
           setSongs(songs);
           console.log(
             "Songs",
