@@ -28,21 +28,12 @@ const Quiz = ({ player }) => {
   const handleSubmitQuiz = (e) => {
     e.preventDefault();
     alert(answer);
-
-    //check for correct answer
-    if (answer === `${song.name} - ${song.artist}`) {
-      setScore((prevScore) => prevScore + 1); //increment score
-    }
-    //progress thru quiz
-    if (Question < 5) {
-      setQuestion(Question + 1); // Move to the next question
-      loadNewQuestion(); // Load new song and answer choices
-      setAnswer(""); // Reset selected answer
-    } else {
-      alert(`Quiz finished! Your score is: ${score}`);
-      setIsStarted(false); // End the quiz
-    }
   };
+
+  //check for correct answer
+  /*     if (answer === `${song.name} - ${song.artist}`) {
+      setScore((prevScore) => prevScore + 1); //increment score
+    } */
 
   const handleAnswerSelect = (e) => {
     const selection = e.target.value;
@@ -52,14 +43,17 @@ const Quiz = ({ player }) => {
 
   //function to get other answer choices
   const getQuizOptions = (songs, randomSong) => {
-    //create an array eith the correct song
-    const options = [`${randomSong.song.name} - ${randomSong.song.artist}`]; //set song name and artist
-    console.log(options);
+    console.log("hi"); // This log will tell you if the function is being called
+
+    // Create an array with the correct song
+    const options = [`${randomSong.name} - ${randomSong.artist}`]; // Corrected to use randomSong.name
+
     // Get 3 other random songs that are not the correct answer
     while (options.length < 4) {
-      //while there are less than 4 songs
+      // While there are less than 4 songs
       const otherSong = getRandomSong(songs);
-      const otherSongText = `${otherSong.song.name} - ${otherSong.song.artist}`; //get song name and artist
+      const otherSongText = `${otherSong.name} - ${otherSong.artist}`; // Get song name and artist
+
       // Make sure we don't add the same song multiple times
       if (!options.includes(otherSongText)) {
         options.push(otherSongText);
@@ -70,6 +64,7 @@ const Quiz = ({ player }) => {
     return shuffleArray(options);
   };
 
+  /*  */
   //Function to shuffle answer choices
   const shuffleArray = (array) => {
     for (let i = array.length - 1; i > 0; i--) {
@@ -83,7 +78,7 @@ const Quiz = ({ player }) => {
 
   /////END FUNCTIONS ///////////
   //fade in animation
-  useEffect(() => {
+  /* useEffect(() => {
     if (isStarted) {
       setTimeout(() => {
         setVisible(true);
@@ -91,31 +86,46 @@ const Quiz = ({ player }) => {
     } else {
       setVisible(false);
     }
-  }, [isStarted]);
+  }, [isStarted]); */
 
   //get songs on load
+
   useEffect(() => {
-    getSavedSongs().then((songs) => {
-      const getRandomItem = (song) =>
-        song[Math.floor(Math.random() * song.length)];
-      if (songs && songs.length > 4) {
-        //ensure we have more than 4 songs
-        setSongs(songs);
-        console.log(
-          "Songs",
-          songs.map((song) => song)
-        );
-        console.log(songs.map((song) => song.name));
-        const randomSong = getRandomSong(songs);
-        const options = getQuizOptions(songs, randomSong);
-        console.log("RANDOM SONG", randomSong);
-        console.log("Options", options);
-        setAnswer(randomSong.song);
-        setAnswerChoices(options);
-      } else {
-        console.error("No Songs Found");
+    const fetchSongs = async () => {
+      try {
+        const songs = await getSavedSongs();
+        if (songs && songs.length > 4) {
+          const getRandomSong = (songList) =>
+            songList[Math.floor(Math.random() * songList.length)];
+
+          setSongs(songs);
+          console.log(
+            "Songs",
+            songs.map((song) => song)
+          );
+          console.log(songs.map((song) => song.name));
+          const randomSong = getRandomSong(songs);
+          console.log("Songs:", songs, "RandomSong:", randomSong);
+          const options = getQuizOptions(songs, randomSong);
+          console.log("options:", options);
+          setAnswer(randomSong.song);
+          setAnswerChoices(options);
+        } else {
+          console.error("Not enough songs or no songs found.");
+        }
+      } catch (error) {
+        console.error("Error fetching songs:", error);
       }
-    });
+    };
+
+    fetchSongs();
+  }, []);
+
+  console.log("Answer choices:", answerChoices);
+
+  useEffect(() => {
+    console.log("answer:", answer);
+    console.log("answerChoices:", answerChoices);
   }, []);
 
   return (
@@ -128,19 +138,20 @@ const Quiz = ({ player }) => {
 
       {songs.length > 0 ? (
         <ul className="quiz__options">
-          {answerChoices.map((song) => (
-            <li key={song?.id}>
-              <label>
-                <input
-                  type="radio"
-                  name="quiz__option"
-                  value={`${song} `}
-                  onChange={handleAnswerSelect}
-                />
-                {song}
-              </label>
-            </li>
-          ))}
+          {answerChoices &&
+            answerChoices.map((song, index) => (
+              <li key={index}>
+                <label>
+                  <input
+                    type="radio"
+                    name="quiz__option"
+                    value={song}
+                    onChange={handleAnswerSelect}
+                  />
+                  {song}
+                </label>
+              </li>
+            ))}
         </ul>
       ) : (
         <p className="quiz__options">Loading Songs...</p>

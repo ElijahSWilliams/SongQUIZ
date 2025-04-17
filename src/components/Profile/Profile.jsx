@@ -1,4 +1,5 @@
 import { useContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "./Profile.css";
 import quizContext from "../../Context/QuizContext";
 import LogOutModal from "../Modal/Modal";
@@ -8,6 +9,8 @@ const Profile = () => {
   const { isLoggedIn, setIsLoggedIn, currentUser, setCurrentUser } =
     useContext(quizContext);
   const [activeModal, setActiveModal] = useState("");
+
+  const navigate = useNavigate();
 
   const handleOpenLogoutModal = () => {
     console.log("Log Out Modal");
@@ -26,10 +29,11 @@ const Profile = () => {
     } else {
       console.log("No Token FOund");
     }
-    setCurrentUser("");
-    localStorage.removeItem("accessToken"); // If using localStorage
-    console.log("User logged out");
-    window.location.href = "/"; // Redirect to home page '/'. Try using router
+    setCurrentUser(null);
+    setIsLoggedIn(false);
+    localStorage.removeItem("accessToken"); // remove from local storage
+    console.log("User logged out"); //debugging
+    navigate("/"); // Redirect to home page '/' using router
     handleCloseModal();
   };
 

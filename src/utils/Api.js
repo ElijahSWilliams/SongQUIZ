@@ -6,6 +6,11 @@ import { checkForToken } from "./Auth";
 //catch errors or convert to response to json
 export default function checkResponse(res) {
   if (!res.ok) {
+    //check for 401 error
+    if (res.status === 401) {
+      console.error("Unauthorized");
+      localStorage.removeItem("accessToken");
+    }
     return Promise.reject(`Error: ${res.status}`);
   } else {
     return res.json();
@@ -13,13 +18,19 @@ export default function checkResponse(res) {
 }
 
 const getProfileInfo = () => {
-  /* console.log(accessToken); */
+  const token = localStorage.getItem("accessToken");
+  console.log("getProfile Token:", token);
 
-  if (accessToken) {
+  if (!token) {
+    console.log("Token Unavailable");
+    return;
+  }
+
+  if (token) {
     return fetch(`${baseUrl}/me`, {
       method: "GET",
       headers: {
-        Authorization: `Bearer ${accessToken}`, //include token for authorization
+        Authorization: `Bearer ${token}`, //include token for authorization
         "Content-Type": `application/json`,
       },
     })
@@ -51,15 +62,21 @@ const getSavedSongs = () => {
       return checkResponse(res);
     })
     .then((data) => {
-      /*    console.log(data.items); */
+      //If no data
+      if (!data.items.length) {
+        console.log("No saved songs found.");
+        return []; // Return an empty array
+      }
+      //map songs
       let songs = data.items.map((song) => {
         return {
-          name: song.track.name,
-          artist: song.track.artists[0].name,
-          id: song.track.id,
+          name: song.track.name || "Unknown Song",
+          artist: song.track.artists[0].name || "Unknown Artist",
+          id: song.track.id || "Unknown ID",
         };
       });
-      /*   console.log("mapped Songs:", songs); */
+      console.log("Song data from Spotify:", songs);
+
       return songs;
     })
     .catch((err) => {

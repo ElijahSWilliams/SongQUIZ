@@ -13,15 +13,30 @@ const Header = () => {
   //VARIABLES AND STATES
   const { isLoggedIn, setIsLoggedIn, currentUser, setCurrentUser } =
     useContext(quizContext);
-  console.log(currentUser);
+  /*  console.log(currentUser); */
   const [loading, setLoading] = useState(true); //inital stage for page load
 
   const navigate = useNavigate();
 
   //FUNCTIONS
+  const handleSignOut = () => {
+    let token = localStorage.getItem("accessToken");
+
+    if (token) {
+      console.log(token);
+    } else {
+      console.log("No Token FOund");
+    }
+    setCurrentUser(null);
+    setIsLoggedIn(false);
+    localStorage.removeItem("accessToken"); // remove from local storage
+    console.log("User logged out"); //debugging
+    navigate("/"); // Redirect to home page '/' using router
+    handleCloseModal();
+  };
   //Sign In Function . maybe pass a function to open a modal that for Spotifys Oauth
   const handleSignIn = () => {
-    console.log("Logging In:", isLoggedIn);
+    /*  console.log("Logging In:", isLoggedIn); */
 
     //start Authentication Process
     redirectAuth().then((res) => {
@@ -44,7 +59,7 @@ const Header = () => {
       getProfileInfo()
         .then((userInfo) => {
           setCurrentUser(userInfo);
-          console.log("CurrentUSER:", userInfo);
+          /* console.log("CurrentUSER:", userInfo); */
         })
         .finally(() => {
           setLoading(false);

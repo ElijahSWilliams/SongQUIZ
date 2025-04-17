@@ -63,7 +63,7 @@ const tokenExchange = async (authCode) => {
       },
       body: new URLSearchParams({
         code: authCode,
-        redirect_uri: redirectURI, // Ensure this matches the URL where you're expecting the code
+        redirect_uri: redirectURI,
         grant_type: "authorization_code",
       }),
     });
@@ -75,7 +75,7 @@ const tokenExchange = async (authCode) => {
       console.log("AccessToken:", data.access_token);
 
       // After receiving the token, clear the URL's query parameters
-      window.history.pushState({}, document.title, window.location.pathname); // This should clean up the URL
+      window.history.pushState({}, document.title, window.location.pathname); //clean up the URL
 
       // Redirect to the home page
       window.location.replace("/"); // Redirects to the home page
