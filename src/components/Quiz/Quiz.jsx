@@ -17,7 +17,7 @@ const Quiz = () => {
   const [answerChoices, setAnswerChoices] = useState(null);
   const [score, setScore] = useState(0);
   const [currentSong, setCurrentSong] = useState(null);
-  const [hasPremium, setHasPremium] = useState(null);
+  const [hasPremium, setHasPremium] = useState(true);
   const { isStarted, setIsStarted } = useContext(quizContext);
 
   const handleSubmitQuiz = (e) => {
@@ -42,7 +42,7 @@ const Quiz = () => {
         setHasPremium(false);
       }
     });
-  });
+  }, []);
 
   //function to get other answer choices
   const getQuizOptions = (songs, randomSong) => {
@@ -128,6 +128,7 @@ const Quiz = () => {
       onSubmit={handleSubmitQuiz}
     >
       <h1 className="quiz__header">Name that Song {Question}</h1>
+
       {hasPremium === null ? (
         <p className="quiz__header-signedOut">Loading User Info...</p>
       ) : hasPremium ? (
@@ -139,6 +140,7 @@ const Quiz = () => {
       ) : (
         <h1>PLACEHOLDER PLAYER</h1>
       )}
+      {/* END TERNARY OPERATOR */}
 
       {/* Render the choices */}
       {songs.length > 0 ? (

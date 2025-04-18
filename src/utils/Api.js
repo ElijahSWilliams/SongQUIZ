@@ -28,7 +28,7 @@ const getSubscriptionStatus = () => {
     })
     .then((data) => {
       console.log("Subscription Status:", data.product);
-      return data.product;
+      return data;
       /*  if (data.product === "") */
     });
 };
