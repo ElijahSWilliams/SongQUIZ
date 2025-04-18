@@ -96,6 +96,9 @@ function App() {
     return () => clearTimeout(logoutTimer); // cleanup timer if component unmounts
   }, [isLoggedIn, navigate]);
 
+  //check if user has premium subscription
+  useEffect(() => {});
+
   return (
     <quizContext.Provider
       value={{

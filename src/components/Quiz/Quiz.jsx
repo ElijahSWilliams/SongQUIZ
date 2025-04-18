@@ -6,6 +6,7 @@ import quizContext from "../../Context/QuizContext";
 import Player from "../Player/Player";
 import { accessToken, stopPlayback } from "../../utils/Constants";
 import { getRandomSong } from "../../utils/Constants";
+import { getSubscriptionStatus } from "../../utils/Api";
 
 const Quiz = () => {
   //state Vars
@@ -16,6 +17,7 @@ const Quiz = () => {
   const [answerChoices, setAnswerChoices] = useState(null);
   const [score, setScore] = useState(0);
   const [currentSong, setCurrentSong] = useState(null);
+  const [hasPremium, setHasPremium] = useState(null);
   const { isStarted, setIsStarted } = useContext(quizContext);
 
   const handleSubmitQuiz = (e) => {
@@ -28,6 +30,19 @@ const Quiz = () => {
     console.log(selection);
     setAnswer(selection);
   };
+
+  //check for subscription status
+  useEffect(() => {
+    getSubscriptionStatus().then((data) => {
+      console.log("Sub Status:", data);
+      if (data === "premium") {
+        setHasPremium(true);
+      } else {
+        console.log("Free Plan");
+        setHasPremium(false);
+      }
+    });
+  });
 
   //function to get other answer choices
   const getQuizOptions = (songs, randomSong) => {
@@ -89,6 +104,8 @@ const Quiz = () => {
           //shuffle songs
           const options = getQuizOptions(songs, randomSong);
           console.log("options:", options);
+          console.log("correctSiong:", randomSong.song);
+          setAnswer(randomSong);
           setAnswerChoices(options);
         } else {
           console.error("Not enough songs or no songs found.");
@@ -111,11 +128,18 @@ const Quiz = () => {
       onSubmit={handleSubmitQuiz}
     >
       <h1 className="quiz__header">Name that Song {Question}</h1>
-      <Player
-        accessToken={accessToken}
-        currentSong={currentSong}
-        songs={songs}
-      />
+      {hasPremium === null ? (
+        <p className="quiz__header-signedOut">Loading User Info...</p>
+      ) : hasPremium ? (
+        <Player
+          accessToken={accessToken}
+          currentSong={currentSong}
+          songs={songs}
+        />
+      ) : (
+        <h1>PLACEHOLDER PLAYER</h1>
+      )}
+
       {/* Render the choices */}
       {songs.length > 0 ? (
         <ul className="quiz__options">

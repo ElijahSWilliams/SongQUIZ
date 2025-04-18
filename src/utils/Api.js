@@ -17,6 +17,22 @@ export default function checkResponse(res) {
   }
 }
 
+const getSubscriptionStatus = () => {
+  return fetch("https://api.spotify.com/v1/me", {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  })
+    .then((res) => {
+      return checkResponse(res);
+    })
+    .then((data) => {
+      console.log("Subscription Status:", data.product);
+      return data.product;
+      /*  if (data.product === "") */
+    });
+};
+
 const getProfileInfo = () => {
   const token = localStorage.getItem("accessToken");
   /* console.log("getProfile Token:", token); */
@@ -125,4 +141,10 @@ const playFromBeginning = (accessToken, deviceID, currentSong) => {
     });
 };
 
-export { getProfileInfo, getSavedSongs, playSong, playFromBeginning };
+export {
+  getProfileInfo,
+  getSavedSongs,
+  playSong,
+  playFromBeginning,
+  getSubscriptionStatus,
+};
