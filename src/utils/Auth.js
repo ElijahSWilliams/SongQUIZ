@@ -72,7 +72,7 @@ const tokenExchange = async (authCode) => {
 
     if (data && data.access_token) {
       localStorage.setItem("accessToken", data.access_token);
-      console.log("AccessToken:", data.access_token);
+      /* console.log("AccessToken:", data.access_token); */
 
       // After receiving the token, clear the URL's query parameters
       window.history.pushState({}, document.title, window.location.pathname); //clean up the URL

@@ -25,7 +25,7 @@ function App() {
   useEffect(() => {
     const checkAuth = async () => {
       let token = localStorage.getItem("accessToken");
-      console.log("token:", token);
+      /* console.log("token:", token); */
 
       if (!token) {
         // if no token

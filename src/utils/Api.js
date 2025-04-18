@@ -19,7 +19,7 @@ export default function checkResponse(res) {
 
 const getProfileInfo = () => {
   const token = localStorage.getItem("accessToken");
-  console.log("getProfile Token:", token);
+  /* console.log("getProfile Token:", token); */
 
   if (!token) {
     console.log("Token Unavailable");
@@ -75,7 +75,7 @@ const getSavedSongs = () => {
           id: song.track.id || "Unknown ID",
         };
       });
-      console.log("Song data from Spotify:", songs);
+      /*  console.log("Song data from Spotify:", songs); */
 
       return songs;
     })

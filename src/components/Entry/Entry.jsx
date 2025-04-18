@@ -1,6 +1,6 @@
 import { useCallback, useContext } from "react";
 import "./Entry.css";
-import Quiz from "../Quiz/Quiz";
+import Quiz from "../Quiz/Quiz.jsx";
 import quizContext from "../../Context/QuizContext";
 
 const Entry = () => {
