@@ -4,14 +4,14 @@ import { useEffect, useState } from "react";
 import { playFromBeginning } from "../../utils/Api";
 import { getRandomSong } from "../../utils/Constants";
 
-const Player = ({ accessToken, songs, onPlayerReady }) => {
+const Player = ({ accessToken, currentSong, songs, onPlayerReady }) => {
   //State Variables
   const [player, setPlayer] = useState(null);
   const [isPlaying, setIsPlaying] = useState("");
   const [deviceID, setDeviceID] = useState(null);
 
   //UseEffect Hooks
-
+  console.log(currentSong);
   //initalize the player
   useEffect(() => {
     if (window.Spotify) {
@@ -78,18 +78,14 @@ const Player = ({ accessToken, songs, onPlayerReady }) => {
         });
       } else {
         //if not playing
-        const randomSong = getRandomSong(songs); //get random song
+        /* const randomSong = getRandomSong(songs); */ //get random song
 
         transferPlayback() //tranfer playback to web device
           .then(() => {
             // After the playback is transferred, resume with the random song
-            playFromBeginning(accessToken, deviceID, randomSong)
+            playFromBeginning(accessToken, deviceID, currentSong)
               .then(() => {
-                console.log(
-                  "Currently Playing:",
-                  randomSong.songUri,
-                  randomSong
-                );
+                console.log("Currently Playing:", currentSong);
                 setIsPlaying(true);
               })
               .then(() => {

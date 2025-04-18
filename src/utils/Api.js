@@ -101,8 +101,8 @@ const playSong = (accessToken) => {
     .catch((err) => console.error(err));
 };
 
-const playFromBeginning = (accessToken, deviceID, randomSong) => {
-  console.log("PLAYINGGGG", randomSong.songUri);
+const playFromBeginning = (accessToken, deviceID, currentSong) => {
+  console.log("PLAYINGGGG", currentSong);
   return fetch(
     `https://api.spotify.com/v1/me/player/play?device_id=${deviceID}`,
     {
@@ -112,7 +112,7 @@ const playFromBeginning = (accessToken, deviceID, randomSong) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        uris: [randomSong.songUri], //play random song
+        uris: [currentSong], //play random song
         position_ms: 0, //start song from beginning
       }),
     }

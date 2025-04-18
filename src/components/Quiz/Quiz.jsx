@@ -15,6 +15,7 @@ const Quiz = () => {
   const [answer, setAnswer] = useState("");
   const [answerChoices, setAnswerChoices] = useState(null);
   const [score, setScore] = useState(0);
+  const [currentSong, setCurrentSong] = useState(null);
   const { isStarted, setIsStarted } = useContext(quizContext);
 
   const handleSubmitQuiz = (e) => {
@@ -32,7 +33,7 @@ const Quiz = () => {
   const getQuizOptions = (songs, randomSong) => {
     //pass in songs and randomSong obecjts
     console.log("songs from getQuizOptions:", songs);
-    console.log("randomSong from getQuizOptions:", randomSong);
+    console.log("randomSong from getQuizOptions:", randomSong.song);
 
     console.log("randomSong +", randomSong);
     const options = [`${randomSong.song.name} - ${randomSong.song.artist}`]; //put correct song in array
@@ -83,9 +84,12 @@ const Quiz = () => {
           console.log(songs.map((song) => song.name));
           const randomSong = getRandomSong(songs); //object with song and name properties
           console.log("RANDOMSONG:", randomSong.song);
+          setCurrentSong(randomSong.song.id);
+
           //shuffle songs
           const options = getQuizOptions(songs, randomSong);
           console.log("options:", options);
+          setAnswerChoices(options);
         } else {
           console.error("Not enough songs or no songs found.");
         }
@@ -97,13 +101,42 @@ const Quiz = () => {
     fetchSongs();
   }, []);
 
+  useEffect(() => {
+    console.log("AnswerChoices:", answerChoices);
+  });
+
   return (
     <form
       className={`quiz ${visible ? "quiz__visible" : ""}`}
       onSubmit={handleSubmitQuiz}
     >
-      <h1 className="quiz__header">Question {Question}</h1>
-      <Player accessToken={accessToken} songs={songs} />
+      <h1 className="quiz__header">Name that Song {Question}</h1>
+      <Player
+        accessToken={accessToken}
+        currentSong={currentSong}
+        songs={songs}
+      />
+      {/* Render the choices */}
+      {songs.length > 0 ? (
+        <ul className="quiz__options">
+          {answerChoices &&
+            answerChoices.map((song, index) => (
+              <li key={index}>
+                <label>
+                  <input
+                    type="radio"
+                    name="quiz__option"
+                    value={song}
+                    onChange={handleAnswerSelect}
+                  />
+                  {song}
+                </label>
+              </li>
+            ))}
+        </ul>
+      ) : (
+        <p className="quiz__options">Loading Songs...</p>
+      )}
     </form>
   );
 };
