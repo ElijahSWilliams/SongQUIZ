@@ -36,6 +36,7 @@
 .quiz__options {
   margin-top: 90px;
   list-style-type: none;
+  margin-left: -85px;
 }
 
 .quiz__options li {
