@@ -1,24 +1,24 @@
-.score {
+/* .score {
   margin-top: 210px;
   width: 200px;
   background-color: rgb(213, 208, 208);
   z-index: 0;
   border-radius: 10px;
-  position: absolute;
-  backdrop-filter: blur(5px); /* Blur effect */
-  left: 60px;
-  padding: 10px;
-
-  /* opacity: 0; */
+  position: absolute; */
+/*   backdrop-filter: blur(5px); */ /* Blur effect */
+/*  left: 60px;
+  padding: 10px; */
+/* 
   transform: scale(0.95);
   transition: opacity 0.8s ease-in-out;
-}
+} */
 
-.score__title {
+/* .score__title {
   text-align: center;
-}
+} */
 
-.score__visible {
+/* .score__visible {
   opacity: 1;
   transform: scale(1);
 }
+ */

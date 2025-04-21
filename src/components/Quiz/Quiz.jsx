@@ -4,6 +4,7 @@ import "./Quiz.css";
 import { getSavedSongs } from "../../utils/Api";
 import quizContext from "../../Context/QuizContext";
 import Player from "../Player/Player";
+import Score from "../Score/Score";
 import { accessToken, stopPlayback } from "../../utils/Constants";
 import { getRandomSong } from "../../utils/Constants";
 import { getSubscriptionStatus } from "../../utils/Api";
@@ -14,6 +15,7 @@ const Quiz = () => {
   const [songs, setSongs] = useState([]);
   const [Question, setQuestion] = useState(1);
   const [answer, setAnswer] = useState("");
+  const [selection, setSelection] = useState(null);
   const [answerChoices, setAnswerChoices] = useState(null);
   const [score, setScore] = useState(0);
   const [currentSong, setCurrentSong] = useState(null);
@@ -22,23 +24,29 @@ const Quiz = () => {
 
   const handleSubmitQuiz = (e) => {
     e.preventDefault();
-    alert(answer);
+    alert(`${answer.song.name} - ${answer.song.artist}`);
+
+    if (selection === answer.song.name) {
+      console.log("Choice:", selection);
+      setScore((prevScore) => prevScore + 1);
+    }
+    console.log("answer:", answer);
+    console.log("selection:", selection);
   };
 
   const handleAnswerSelect = (e) => {
-    const selection = e.target.value;
-    console.log(selection);
-    setAnswer(selection);
+    const playerSelection = e.target.value;
+    setSelection(playerSelection);
+    console.log("selected:", playerSelection);
   };
 
   //check for subscription status
   useEffect(() => {
     getSubscriptionStatus().then((data) => {
-      console.log("Sub Status:", data);
-      if (data === "premium") {
+      /* console.log("Sub Status:", data.product); */
+      if (data.product === "premium") {
         setHasPremium(true);
       } else {
-        console.log("Free Plan");
         setHasPremium(false);
       }
     });
@@ -47,10 +55,10 @@ const Quiz = () => {
   //function to get other answer choices
   const getQuizOptions = (songs, randomSong) => {
     //pass in songs and randomSong obecjts
-    console.log("songs from getQuizOptions:", songs);
-    console.log("randomSong from getQuizOptions:", randomSong.song);
+    /*    console.log("songs from getQuizOptions:", songs);
+    console.log("randomSong from getQuizOptions:", randomSong.song); */
 
-    console.log("randomSong +", randomSong);
+    /* console.log("randomSong +", randomSong); */
     const options = [`${randomSong.song.name} - ${randomSong.song.artist}`]; //put correct song in array
     console.log("options:", options);
 
@@ -62,7 +70,7 @@ const Quiz = () => {
       console.log("otherSong:", otherSong.song);
 
       const otherSongText = `${otherSong.song.name} - ${otherSong.song.artist}`;
-      console.log("songtext:", otherSongText);
+      /*  console.log("songtext:", otherSongText); */
 
       if (!options.includes(otherSongText)) {
         options.push(otherSongText);
@@ -72,10 +80,8 @@ const Quiz = () => {
     return shuffleArray(options);
   };
 
-  /*  */
   //Function to shuffle answer choices
   const shuffleArray = (array) => {
-    console.log("SHUFFLEARRAY FUNCTION");
     for (let i = array.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
       [array[i], array[j]] = [array[j], array[i]]; // Swap elements
@@ -118,9 +124,10 @@ const Quiz = () => {
     fetchSongs();
   }, []);
 
-  useEffect(() => {
+  /*  useEffect(() => {
     console.log("AnswerChoices:", answerChoices);
-  });
+    console.log("hasPremium:", hasPremium);
+  }); */
 
   return (
     <form
@@ -141,6 +148,8 @@ const Quiz = () => {
         <h1>PLACEHOLDER PLAYER</h1>
       )}
       {/* END TERNARY OPERATOR */}
+
+      <Score score={score} />
 
       {/* Render the choices */}
       {songs.length > 0 ? (
@@ -163,6 +172,12 @@ const Quiz = () => {
       ) : (
         <p className="quiz__options">Loading Songs...</p>
       )}
+
+      <button className="quiz__submit-btn" type="submit">
+        Submit
+      </button>
+
+      <button className="quiz__reset-btn">Reset</button>
     </form>
   );
 };
