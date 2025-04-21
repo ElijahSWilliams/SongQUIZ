@@ -24,14 +24,14 @@ const Quiz = () => {
 
   const handleSubmitQuiz = (e) => {
     e.preventDefault();
-    alert(`${answer.song.name} - ${answer.song.artist}`);
+    alert(answer.formattedAnswer);
 
-    if (selection === answer.song.name) {
+    if (selection === answer.formattedAnswer) {
       console.log("Choice:", selection);
       setScore((prevScore) => prevScore + 1);
     }
-    console.log("answer:", answer);
-    console.log("selection:", selection);
+    /*  console.log("answer:", answer.formattedAnswer);
+    console.log("selection:", selection); */
   };
 
   const handleAnswerSelect = (e) => {
@@ -111,7 +111,9 @@ const Quiz = () => {
           const options = getQuizOptions(songs, randomSong);
           console.log("options:", options);
           console.log("correctSiong:", randomSong.song);
-          setAnswer(randomSong);
+          const formattedAnswer = `${randomSong.song.name} - ${randomSong.song.artist}`;
+          console.log(formattedAnswer);
+          setAnswer({ ...randomSong, formattedAnswer: formattedAnswer });
           setAnswerChoices(options);
         } else {
           console.error("Not enough songs or no songs found.");
