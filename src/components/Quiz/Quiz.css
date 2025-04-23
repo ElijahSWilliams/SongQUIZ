@@ -34,9 +34,10 @@
 }
 
 .quiz__options {
-  margin-top: 90px;
+  margin: 10px -10px;
+  /* margin-top: 40px; */
   list-style-type: none;
-  margin-left: -85px;
+  /*  margin-left: -85px;  */
 }
 
 .quiz__options li {

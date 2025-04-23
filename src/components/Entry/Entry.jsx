@@ -1,4 +1,4 @@
-import { useCallback, useContext } from "react";
+import { useCallback, useContext, useEffect } from "react";
 import "./Entry.css";
 import Quiz from "../Quiz/Quiz.jsx";
 import quizContext from "../../Context/QuizContext";
@@ -16,6 +16,9 @@ const Entry = () => {
   const handleStartQuiz = () => {
     setIsStarted(true);
   };
+  useEffect(() => {
+    console.log(`currentUser in ENtry: ${currentUser}`);
+  }, []);
 
   return (
     <div className="entry">

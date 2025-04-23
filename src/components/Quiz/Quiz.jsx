@@ -62,6 +62,7 @@ const Quiz = () => {
     //if currentQuestion is less than quizLimit and currentQuestion is less than the length of the songs array.
     if (currentQuestion < quizLimit - 1 && currentQuestion < songs.length - 1) {
       setCurrentQuestion((prev) => prev + 1); //increment currentQuestion Count
+      setSelection(null); //reset user choice for the next question
     } else {
       console.log("Quiz finished!");
       // Maybe show results or redirect to end screen
@@ -164,7 +165,9 @@ const Quiz = () => {
       className={`quiz ${visible ? "quiz__visible" : ""}`}
       onSubmit={handleSubmitQuiz}
     >
-      <h1 className="quiz__header">Name that Song {currentQuestion}</h1>
+      <h1 className="quiz__header"> Question Number: {currentQuestion}</h1>
+
+      <h2 className="quiz__header-question">Name That Song</h2>
 
       {hasPremium === null ? (
         <p className="quiz__header-signedOut">Loading User Info...</p>
@@ -176,7 +179,7 @@ const Quiz = () => {
           onPlayerReady={handlePlayerReady}
         />
       ) : (
-        <h1>PLACEHOLDER PLAYER</h1>
+        <h1>Spotify Free PLAYER</h1>
       )}
       {/* END TERNARY OPERATOR */}
 
@@ -201,7 +204,7 @@ const Quiz = () => {
             ))}
         </ul>
       ) : (
-        <p className="quiz__options">Loading Songs...</p>
+        <p className="quiz__options">Getting Songs...</p>
       )}
 
       <button className="quiz__submit-btn" type="submit">
