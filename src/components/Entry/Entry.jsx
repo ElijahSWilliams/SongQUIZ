@@ -17,7 +17,7 @@ const Entry = () => {
     setIsStarted(true);
   };
   useEffect(() => {
-    console.log(`currentUser in ENtry: ${currentUser}`);
+    console.log("currentUser in ENtry:" + currentUser);
   }, []);
 
   return (
@@ -26,7 +26,9 @@ const Entry = () => {
         <button onClick={handleStartQuiz} className="entry__play-btn">
           {!isLoggedIn
             ? "Start Quiz (Guest Mode)"
-            : `Start Quiz as ${currentUser?.display_name}`}
+            : currentUser === null
+            ? "Fetching info..."
+            : `Start Quiz as ${currentUser.display_name}`}
         </button>
       ) : (
         //if started, render quiz
