@@ -13,31 +13,59 @@ const Quiz = () => {
   //state Vars
   const [visible, setVisible] = useState(false);
   const [songs, setSongs] = useState([]);
-  const [Question, setQuestion] = useState(1);
+  const [currentQuestion, setCurrentQuestion] = useState(1);
   const [answer, setAnswer] = useState("");
   const [selection, setSelection] = useState(null);
   const [answerChoices, setAnswerChoices] = useState(null);
   const [score, setScore] = useState(0);
   const [currentSong, setCurrentSong] = useState(null);
   const [hasPremium, setHasPremium] = useState(true);
+  const [spotifyPlayer, setSpotifyPlayer] = useState(null);
   const { isStarted, setIsStarted } = useContext(quizContext);
 
   const handleSubmitQuiz = (e) => {
     e.preventDefault();
-    alert(answer.formattedAnswer);
+    /*  alert(answer.formattedAnswer); */
 
+    //if statement to update score
     if (selection === answer.formattedAnswer) {
       console.log("Choice:", selection);
       setScore((prevScore) => prevScore + 1);
+    } else if (!selection === answer.formattedAnswer) {
+      console.log("Sorry, Incorrect Answer.");
     }
-    /*  console.log("answer:", answer.formattedAnswer);
-    console.log("selection:", selection); */
+    console.log("Calling handleNextQuestion....");
+    handleNextQuestion();
+  };
+
+  const handleResetQuiz = (e) => {
+    e.preventDefault();
+    console.log("Resetting");
+    setIsStarted(false);
   };
 
   const handleAnswerSelect = (e) => {
     const playerSelection = e.target.value;
     setSelection(playerSelection);
     console.log("selected:", playerSelection);
+  };
+
+  const handlePlayerReady = (playerInstance) => {
+    setSpotifyPlayer(playerInstance); // Store it if you want to use it later
+    console.log("Player is ready and passed to parent:", playerInstance);
+  };
+
+  const handleNextQuestion = () => {
+    console.log("Next Question...");
+    const quizLimit = 5;
+
+    //if currentQuestion is less than quizLimit and currentQuestion is less than the length of the songs array.
+    if (currentQuestion < quizLimit - 1 && currentQuestion < songs.length - 1) {
+      setCurrentQuestion((prev) => prev + 1); //increment currentQuestion Count
+    } else {
+      console.log("Quiz finished!");
+      // Maybe show results or redirect to end screen
+    }
   };
 
   //check for subscription status
@@ -136,7 +164,7 @@ const Quiz = () => {
       className={`quiz ${visible ? "quiz__visible" : ""}`}
       onSubmit={handleSubmitQuiz}
     >
-      <h1 className="quiz__header">Name that Song {Question}</h1>
+      <h1 className="quiz__header">Name that Song {currentQuestion}</h1>
 
       {hasPremium === null ? (
         <p className="quiz__header-signedOut">Loading User Info...</p>
@@ -145,6 +173,7 @@ const Quiz = () => {
           accessToken={accessToken}
           currentSong={currentSong}
           songs={songs}
+          onPlayerReady={handlePlayerReady}
         />
       ) : (
         <h1>PLACEHOLDER PLAYER</h1>
@@ -179,7 +208,9 @@ const Quiz = () => {
         Submit
       </button>
 
-      <button className="quiz__reset-btn">Reset</button>
+      <button className="quiz__reset-btn" onClick={handleResetQuiz}>
+        Reset
+      </button>
     </form>
   );
 };

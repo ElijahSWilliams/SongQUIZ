@@ -78,7 +78,6 @@ const Player = ({ accessToken, currentSong, songs, onPlayerReady }) => {
         });
       } else {
         //if not playing
-        /* const randomSong = getRandomSong(songs); */ //get random song
 
         transferPlayback() //tranfer playback to web device
           .then(() => {
@@ -87,9 +86,7 @@ const Player = ({ accessToken, currentSong, songs, onPlayerReady }) => {
               .then(() => {
                 console.log("Currently Playing:", currentSong);
                 setIsPlaying(true);
-              })
-              .then(() => {
-                handlePause();
+                /*  handlePause(); */
               })
               .catch((err) => console.error(err));
           })
