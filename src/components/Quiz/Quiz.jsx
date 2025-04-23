@@ -30,7 +30,7 @@ const Quiz = () => {
     //if statement to update score
     if (selection === answer.formattedAnswer) {
       console.log("Choice:", selection);
-      setScore((prevScore) => prevScore + 1);
+      setScore((prevScore) => prevScore + 100);
     } else if (!selection === answer.formattedAnswer) {
       console.log("Sorry, Incorrect Answer.");
     }
@@ -169,6 +169,8 @@ const Quiz = () => {
 
       <h2 className="quiz__header-question">Name That Song</h2>
 
+      <Score score={score} />
+
       {hasPremium === null ? (
         <p className="quiz__header-signedOut">Loading User Info...</p>
       ) : hasPremium ? (
@@ -182,8 +184,6 @@ const Quiz = () => {
         <h1>Spotify Free PLAYER</h1>
       )}
       {/* END TERNARY OPERATOR */}
-
-      <Score score={score} />
 
       {/* Render the choices */}
       {songs.length > 0 ? (
