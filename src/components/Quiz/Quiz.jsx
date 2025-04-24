@@ -20,6 +20,7 @@ const Quiz = () => {
   const [score, setScore] = useState(0);
   const [currentSong, setCurrentSong] = useState(null);
   const [hasPremium, setHasPremium] = useState(true);
+  const [disableOptions, setDisableOptions] = useState(null);
   const [spotifyPlayer, setSpotifyPlayer] = useState(null);
   const { isStarted, setIsStarted } = useContext(quizContext);
 
@@ -63,10 +64,35 @@ const Quiz = () => {
     if (currentQuestion < quizLimit - 1 && currentQuestion < songs.length - 1) {
       setCurrentQuestion((prev) => prev + 1); //increment currentQuestion Count
       setSelection(null); //reset user choice for the next question
+      generateNextQuestion(); //get new set of Songs
     } else {
       console.log("Quiz finished!");
       // Maybe show results or redirect to end screen
     }
+  };
+
+  const generateNextQuestion = () => {
+    //disable the radio buttons
+    setDisableOptions(true);
+
+    //uncheck the radio buttons
+    setSelection(null);
+
+    const randomSong = getRandomSong(songs); // pick a song
+    setCurrentSong(randomSong.song.id);
+
+    const options = getQuizOptions(songs, randomSong); // get options
+    const shuffledOptions = shuffleArray(options); //mix them up
+
+    const formattedAnswer = `${randomSong.song.name} - ${randomSong.song.artist}`;
+    console.log("formattedAnswer:", formattedAnswer);
+
+    setAnswer({ ...randomSong, formattedAnswer });
+    setAnswerChoices(shuffledOptions); // use the shuffled version!
+
+    setTimeout(() => {
+      setDisableOptions(false);
+    }, 1500);
   };
 
   //check for subscription status
@@ -197,6 +223,8 @@ const Quiz = () => {
                     name="quiz__option"
                     value={song}
                     onChange={handleAnswerSelect}
+                    disabled={disableOptions}
+                    checked={selection === song}
                   />
                   {song}
                 </label>
