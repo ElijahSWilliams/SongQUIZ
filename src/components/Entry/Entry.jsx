@@ -16,9 +16,6 @@ const Entry = () => {
   const handleStartQuiz = () => {
     setIsStarted(true);
   };
-  useEffect(() => {
-    console.log("currentUser in ENtry:" + currentUser);
-  }, []);
 
   return (
     <div className="entry">

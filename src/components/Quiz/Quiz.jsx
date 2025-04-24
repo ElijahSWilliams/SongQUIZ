@@ -8,6 +8,7 @@ import Score from "../Score/Score";
 import { accessToken, stopPlayback } from "../../utils/Constants";
 import { getRandomSong } from "../../utils/Constants";
 import { getSubscriptionStatus } from "../../utils/Api";
+import EndModal from "../QuizEndModal/QuizEndModal";
 
 const Quiz = () => {
   //state Vars
@@ -21,6 +22,7 @@ const Quiz = () => {
   const [currentSong, setCurrentSong] = useState(null);
   const [hasPremium, setHasPremium] = useState(true);
   const [disableOptions, setDisableOptions] = useState(null);
+  const [activeModal, setActiveModal] = useState("");
   const [spotifyPlayer, setSpotifyPlayer] = useState(null);
   const { isStarted, setIsStarted } = useContext(quizContext);
 
@@ -67,7 +69,9 @@ const Quiz = () => {
       generateNextQuestion(); //get new set of Songs
     } else {
       console.log("Quiz finished!");
+      setIsStarted(false);
       // Maybe show results or redirect to end screen
+      loadEndScreen();
     }
   };
 
@@ -93,6 +97,11 @@ const Quiz = () => {
     setTimeout(() => {
       setDisableOptions(false);
     }, 1500);
+  };
+
+  const loadEndScreen = () => {
+    console.log("ENDING");
+    setActiveModal("endModal");
   };
 
   //check for subscription status

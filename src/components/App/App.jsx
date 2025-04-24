@@ -15,6 +15,7 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
   const [accessToken, setAccessToken] = useState(null);
+  const [activeModal, setActiveModal] = useState("");
 
   //variables
   const ONE_HOUR = 60 * 60 * 1000; //variable for an hour timer
@@ -116,6 +117,13 @@ function App() {
         <Header />
         {/* <Score /> */}
         <Entry />
+        {activeModal === "endModal" && (
+          <EndModal
+            activeModal={activeModal}
+            handleCloseModal={handleCloseModal}
+            score={score}
+          />
+        )}
       </div>
     </quizContext.Provider>
   );
