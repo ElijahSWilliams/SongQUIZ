@@ -34,8 +34,9 @@ const Quiz = () => {
     if (selection === answer.formattedAnswer) {
       console.log("Choice:", selection);
       setScore((prevScore) => prevScore + 100);
-    } else if (!selection === answer.formattedAnswer) {
-      console.log("Sorry, Incorrect Answer.");
+    } else if (selection === null) {
+      console.log("Please Choose Something");
+      return; //prevent submission of null answers
     }
     console.log("Calling handleNextQuestion....");
     handleNextQuestion();
