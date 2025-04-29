@@ -64,7 +64,7 @@ const Quiz = () => {
     const quizLimit = 5;
 
     //if currentQuestion is less than quizLimit and currentQuestion is less than the length of the songs array.
-    if (currentQuestion < quizLimit - 1 && currentQuestion < songs.length - 1) {
+    if (currentQuestion < quizLimit && currentQuestion < songs.length - 1) {
       setCurrentQuestion((prev) => prev + 1); //increment currentQuestion Count
       setSelection(null); //reset user choice for the next question
       generateNextQuestion(); //get new set of Songs
