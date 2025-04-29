@@ -69,8 +69,8 @@ const Quiz = () => {
       generateNextQuestion(); //get new set of Songs
     } else {
       console.log("Quiz finished!");
-      setIsStarted(false);
-      // Maybe show results or redirect to end screen
+      /*  setIsStarted(false); */
+      // Show results or redirect to end screen
       loadEndScreen();
     }
   };
@@ -102,6 +102,10 @@ const Quiz = () => {
   const loadEndScreen = () => {
     console.log("ENDING");
     setActiveModal("endModal");
+  };
+
+  const handleCloseModal = (e) => {
+    setActiveModal("");
   };
 
   //check for subscription status
@@ -251,6 +255,14 @@ const Quiz = () => {
       <button className="quiz__reset-btn" onClick={handleResetQuiz}>
         Reset
       </button>
+
+      {activeModal === "endModal" && (
+        <EndModal
+          activeModal={activeModal}
+          handleCloseModal={handleCloseModal}
+          score={score} // Passing score to EndModal component
+        />
+      )}
     </form>
   );
 };
