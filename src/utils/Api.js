@@ -128,7 +128,7 @@ const playFromBeginning = (accessToken, deviceID, currentSong) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        uris: [currentSong], //play random song
+        uris: [`spotify:track:${currentSong}`], //play random song
         position_ms: 0, //start song from beginning
       }),
     }

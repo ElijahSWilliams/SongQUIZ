@@ -86,7 +86,7 @@ const Player = ({ accessToken, currentSong, songs, onPlayerReady }) => {
               .then(() => {
                 console.log("Currently Playing:", currentSong);
                 setIsPlaying(true);
-                /*  handlePause(); */
+                handlePause();
               })
               .catch((err) => console.error(err));
           })

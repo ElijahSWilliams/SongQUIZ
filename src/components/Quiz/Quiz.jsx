@@ -35,7 +35,6 @@ const Quiz = () => {
       console.log("Choice:", selection);
       setScore((prevScore) => prevScore + 100);
     } else if (selection === null) {
-      console.log("Please Choose Something");
       return; //prevent submission of null answers
     }
     console.log("Calling handleNextQuestion....");
@@ -43,8 +42,6 @@ const Quiz = () => {
   };
 
   const handleResetQuiz = (e) => {
-    /*  e.preventDefault(); */
-    console.log("Resetting");
     setIsStarted(false);
     setScore(0);
     setSelection(null);
@@ -100,11 +97,10 @@ const Quiz = () => {
 
     setTimeout(() => {
       setDisableOptions(false);
-    }, 1500);
+    }, 1200);
   };
 
   const loadEndScreen = () => {
-    console.log("ENDING");
     setActiveModal("endModal");
   };
 
