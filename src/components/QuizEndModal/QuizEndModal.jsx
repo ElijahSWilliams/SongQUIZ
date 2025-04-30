@@ -1,6 +1,11 @@
 import "./QuizEndModal.css";
 
-function QuizEndModal({ activeModal, handleCloseModal, score }) {
+function QuizEndModal({
+  activeModal,
+  handleCloseModal,
+  handleResetQuiz,
+  score,
+}) {
   const getEndMessage = () => {
     if (score >= 350) return "🎉 You're a music master!";
     if (score >= 250) return "👏 Great job!";
@@ -19,8 +24,9 @@ function QuizEndModal({ activeModal, handleCloseModal, score }) {
         <button
           className="modal__logout-btn"
           onClick={() => {
-            console.log("ENDED!");
-            /*  handleCloseModal(); */
+            console.log("DONE!");
+            handleCloseModal();
+            handleResetQuiz();
           }}
         >
           Go Home

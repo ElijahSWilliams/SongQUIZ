@@ -43,9 +43,12 @@ const Quiz = () => {
   };
 
   const handleResetQuiz = (e) => {
-    e.preventDefault();
+    /*  e.preventDefault(); */
     console.log("Resetting");
     setIsStarted(false);
+    setScore(0);
+    setSelection(null);
+    setCurrentQuestion(1);
   };
 
   const handleAnswerSelect = (e) => {
@@ -261,6 +264,7 @@ const Quiz = () => {
         <EndModal
           activeModal={activeModal}
           handleCloseModal={handleCloseModal}
+          handleResetQuiz={handleResetQuiz}
           score={score} // Passing score to EndModal component
         />
       )}
