@@ -218,9 +218,11 @@ const Quiz = () => {
           currentSong={currentSong}
           songs={songs}
           onPlayerReady={handlePlayerReady}
+          disableOptions={disableOptions}
+          setDisableOptions={setDisableOptions}
         />
       ) : (
-        <h1>Spotify Free PLAYER</h1>
+        (console.log("Song playing", songs), (<audio src={songs} autoPlay />))
       )}
       {/* END TERNARY OPERATOR */}
 

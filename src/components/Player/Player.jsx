@@ -4,7 +4,14 @@ import { useEffect, useState } from "react";
 import { playFromBeginning } from "../../utils/Api";
 import { getRandomSong } from "../../utils/Constants";
 
-const Player = ({ accessToken, currentSong, songs, onPlayerReady }) => {
+const Player = ({
+  accessToken,
+  currentSong,
+  songs,
+  onPlayerReady,
+  disableOptions,
+  setDisableOptions,
+}) => {
   //State Variables
   const [player, setPlayer] = useState(null);
   const [isPlaying, setIsPlaying] = useState("");
@@ -78,7 +85,6 @@ const Player = ({ accessToken, currentSong, songs, onPlayerReady }) => {
         });
       } else {
         //if not playing
-
         transferPlayback() //tranfer playback to web device
           .then(() => {
             // After the playback is transferred, resume with the random song
@@ -94,13 +100,14 @@ const Player = ({ accessToken, currentSong, songs, onPlayerReady }) => {
             console.error("Error transferring playback:", error);
           });
       }
-      setIsPlaying(!isPlaying);
+      /*   setIsPlaying(!isPlaying); */
     }
   };
 
   const handlePause = () => {
     setTimeout(() => {
       player.pause();
+      setIsPlaying(false);
     }, 10000);
   };
   ///////////////////END PLAYBACK CONTROL FUNCTION///////////////////////////////////
@@ -141,7 +148,7 @@ const Player = ({ accessToken, currentSong, songs, onPlayerReady }) => {
         onClick={togglePlayBack}
         disabled={isPlaying}
       >
-        {isPlaying ? "Pause" : "Play"}
+        {isPlaying ? "Playing..." : "Play"}
       </button>
       {/* <button onClick={() => player?.nextTrack()}>Next &raquo;</button> */}
     </div>
