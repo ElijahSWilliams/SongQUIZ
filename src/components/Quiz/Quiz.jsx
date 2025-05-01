@@ -28,7 +28,11 @@ const Quiz = () => {
 
   const handleSubmitQuiz = (e) => {
     e.preventDefault();
-    /*  alert(answer.formattedAnswer); */
+
+    //Pause the music
+    if (spotifyPlayer) {
+      spotifyPlayer.pause().then(() => console.log("Paused"));
+    }
 
     //if statement to update score
     if (selection === answer.formattedAnswer) {
@@ -37,7 +41,8 @@ const Quiz = () => {
     } else if (selection === null) {
       return; //prevent submission of null answers
     }
-    console.log("Calling handleNextQuestion....");
+    //Pause the music
+
     handleNextQuestion();
   };
 
