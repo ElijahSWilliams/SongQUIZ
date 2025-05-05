@@ -23,6 +23,7 @@ const Quiz = () => {
   const [hasPremium, setHasPremium] = useState(true);
   const [disableOptions, setDisableOptions] = useState(null);
   const [activeModal, setActiveModal] = useState("");
+  const [isPlaying, setIsPlaying] = useState(false);
   const [spotifyPlayer, setSpotifyPlayer] = useState(null);
   const { isStarted, setIsStarted } = useContext(quizContext);
 
@@ -35,6 +36,7 @@ const Quiz = () => {
         .pause()
         .then(() => {
           console.log("Submitted");
+          setIsPlaying(false);
         })
         .catch((err) => {
           console.error(err);
@@ -232,6 +234,8 @@ const Quiz = () => {
           onPlayerReady={handlePlayerReady}
           disableOptions={disableOptions}
           setDisableOptions={setDisableOptions}
+          isPlaying={isPlaying}
+          setIsPlaying={setIsPlaying}
         />
       ) : (
         (console.log("Song playing", songs), (<audio src={songs} autoPlay />))

@@ -11,11 +11,17 @@ const Player = ({
   onPlayerReady,
   disableOptions,
   setDisableOptions,
+  isPlaying,
+  setIsPlaying,
 }) => {
   //State Variables
   const [player, setPlayer] = useState(null);
-  const [isPlaying, setIsPlaying] = useState("");
+  /* const [isPlaying, setIsPlaying] = useState(""); */
   const [deviceID, setDeviceID] = useState(null);
+
+  useEffect(() => {
+    console.log("disabledOptions:", disableOptions);
+  });
 
   //UseEffect Hooks
   console.log(currentSong);
