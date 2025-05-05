@@ -100,7 +100,6 @@ const Player = ({
             console.error("Error transferring playback:", error);
           });
       }
-      /*   setIsPlaying(!isPlaying); */
     }
   };
 

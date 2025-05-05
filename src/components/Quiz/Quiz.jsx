@@ -31,7 +31,14 @@ const Quiz = () => {
 
     //Pause the music
     if (spotifyPlayer) {
-      spotifyPlayer.pause().then(() => console.log("Paused"));
+      spotifyPlayer
+        .pause()
+        .then(() => {
+          console.log("Submitted");
+        })
+        .catch((err) => {
+          console.error(err);
+        });
     }
 
     //if statement to update score
