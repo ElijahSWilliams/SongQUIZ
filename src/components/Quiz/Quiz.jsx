@@ -21,7 +21,7 @@ const Quiz = () => {
   const [answerChoices, setAnswerChoices] = useState(null);
   const [score, setScore] = useState(0);
   const [currentSong, setCurrentSong] = useState(null);
-  const [hasPremium, setHasPremium] = useState(true);
+  const [hasPremium, setHasPremium] = useState();
   const [disableOptions, setDisableOptions] = useState(null);
   const [activeModal, setActiveModal] = useState("");
   const [isPlaying, setIsPlaying] = useState(false);

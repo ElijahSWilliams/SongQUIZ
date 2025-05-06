@@ -25,12 +25,6 @@ export const getRandomSong = (songs) => {
   return { song, songUri };
 };
 
-/* export const getRandomSong = (songs) => {
-  if (!songs || songs.length === 0) return null;
-  const randomNumber = Math.floor(Math.random() * songs.length);
-  return songs[randomNumber]; // ✅ just return the actual song
-}; */
-
 export const stopPlayback = () => {
   player.pause();
 };
