@@ -2,6 +2,7 @@ import { useCallback, useContext, useEffect } from "react";
 import "./Entry.css";
 import Quiz from "../Quiz/Quiz.jsx";
 import quizContext from "../../Context/QuizContext";
+import { handleSignIn } from "../../utils/Auth.js";
 
 const Entry = () => {
   const {
@@ -19,16 +20,18 @@ const Entry = () => {
 
   return (
     <div className="entry">
-      {!isStarted ? ( //if not started, render btn
-        <button onClick={handleStartQuiz} className="entry__play-btn">
+      {!isStarted ? (
+        <button
+          onClick={!isLoggedIn ? handleSignIn : handleStartQuiz}
+          className="entry__play-btn"
+        >
           {!isLoggedIn
-            ? "Start Quiz (Guest Mode)"
+            ? "Sign In"
             : currentUser === null
             ? "Fetching info..."
             : `Start Quiz as ${currentUser.display_name}`}
         </button>
       ) : (
-        //if started, render quiz
         <Quiz />
       )}
     </div>

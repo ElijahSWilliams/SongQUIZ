@@ -8,6 +8,7 @@ import Profile from "../Profile/Profile";
 import { getProfileInfo } from "../../utils/Api";
 import { Routes } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import { handleSignIn } from "../../utils/Auth";
 
 const Header = () => {
   //VARIABLES AND STATES
@@ -19,36 +20,7 @@ const Header = () => {
   const navigate = useNavigate();
 
   //FUNCTIONS
-  const handleSignOut = () => {
-    let token = localStorage.getItem("accessToken");
-
-    if (token) {
-      console.log(token);
-    } else {
-      console.log("No Token FOund");
-    }
-    setCurrentUser(null);
-    setIsLoggedIn(false);
-    localStorage.removeItem("accessToken"); // remove from local storage
-    console.log("User logged out"); //debugging
-    navigate("/"); // Redirect to home page '/' using router
-    handleCloseModal();
-  };
   //Sign In Function . maybe pass a function to open a modal that for Spotifys Oauth
-  const handleSignIn = () => {
-    /*  console.log("Logging In:", isLoggedIn); */
-
-    //start Authentication Process
-    redirectAuth().then((res) => {
-      setIsLoggedIn(true);
-      //call getProfile
-      getProfileInfo().then((userInfo) => {
-        console.log(userInfo);
-        setCurrentUser(userInfo);
-        setLoading(false);
-      });
-    });
-  };
 
   //useEffect HOOKS
   ///

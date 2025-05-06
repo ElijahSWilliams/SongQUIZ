@@ -9,6 +9,20 @@ import {
   scope,
 } from "./Constants";
 
+const handleSignIn = () => {
+  //start Authentication Process
+  console.log("Signing In");
+  redirectAuth().then((res) => {
+    setIsLoggedIn(true);
+    //call getProfile
+    getProfileInfo().then((userInfo) => {
+      console.log(userInfo);
+      setCurrentUser(userInfo);
+      setLoading(false);
+    });
+  });
+};
+
 //function to redirect user to spotify auth page
 const redirectAuth = () => {
   const authURL =
@@ -91,4 +105,4 @@ const tokenExchange = async (authCode) => {
   }
 };
 
-export { redirectAuth, handleRedirect, checkForToken };
+export { redirectAuth, handleRedirect, checkForToken, handleSignIn };

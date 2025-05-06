@@ -4,6 +4,7 @@ import "./Quiz.css";
 import { getSavedSongs } from "../../utils/Api";
 import quizContext from "../../Context/QuizContext";
 import Player from "../Player/Player";
+import GuestPlayer from "../Player/GuestPlayer";
 import Score from "../Score/Score";
 import { accessToken, stopPlayback } from "../../utils/Constants";
 import { getRandomSong } from "../../utils/Constants";
@@ -208,11 +209,6 @@ const Quiz = () => {
     fetchSongs();
   }, []);
 
-  /*  useEffect(() => {
-    console.log("AnswerChoices:", answerChoices);
-    console.log("hasPremium:", hasPremium);
-  }); */
-
   return (
     <form
       className={`quiz ${visible ? "quiz__visible" : ""}`}
@@ -226,7 +222,7 @@ const Quiz = () => {
 
       {hasPremium === null ? (
         <p className="quiz__header-signedOut">Loading User Info...</p>
-      ) : hasPremium ? (
+      ) : hasPremium ? ( //if user has premium
         <Player
           accessToken={accessToken}
           currentSong={currentSong}
@@ -238,7 +234,13 @@ const Quiz = () => {
           setIsPlaying={setIsPlaying}
         />
       ) : (
-        (console.log("Song playing", songs), (<audio src={songs} autoPlay />))
+        //if user does not have premium
+        <GuestPlayer
+          currentSong={currentSong}
+          songs={songs}
+          disableOptions={disableOptions}
+          setDisableOptions={setDisableOptions}
+        />
       )}
       {/* END TERNARY OPERATOR */}
 

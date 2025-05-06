@@ -7,10 +7,7 @@ import { getRandomSong } from "../../utils/Constants";
 const Player = ({
   accessToken,
   currentSong,
-  songs,
   onPlayerReady,
-  disableOptions,
-  setDisableOptions,
   isPlaying,
   setIsPlaying,
 }) => {
@@ -18,10 +15,6 @@ const Player = ({
   const [player, setPlayer] = useState(null);
   /* const [isPlaying, setIsPlaying] = useState(""); */
   const [deviceID, setDeviceID] = useState(null);
-
-  useEffect(() => {
-    console.log("disabledOptions:", disableOptions);
-  });
 
   //UseEffect Hooks
   console.log(currentSong);
