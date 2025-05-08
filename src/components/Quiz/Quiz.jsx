@@ -17,6 +17,7 @@ const Quiz = () => {
   const [songs, setSongs] = useState([]);
   const [currentQuestion, setCurrentQuestion] = useState(1);
   const [answer, setAnswer] = useState("");
+  const [currentSongImage, setCurrentSongImage] = useState("");
   const [selection, setSelection] = useState(null);
   const [answerChoices, setAnswerChoices] = useState(null);
   const [score, setScore] = useState(0);
@@ -75,7 +76,6 @@ const Quiz = () => {
   };
 
   const handleNextQuestion = () => {
-    console.log("Next Question...");
     const quizLimit = 5;
 
     //if currentQuestion is less than quizLimit and currentQuestion is less than the length of the songs array.
@@ -99,7 +99,9 @@ const Quiz = () => {
     setSelection(null);
 
     const randomSong = getRandomSong(songs); // pick a song
+    console.log(randomSong.song.image.url);
     setCurrentSong(randomSong.song.id);
+    setCurrentSongImage(randomSong.song.image.url);
 
     const options = getQuizOptions(songs, randomSong); // get options
     const shuffledOptions = shuffleArray(options); //mix them up
@@ -108,7 +110,7 @@ const Quiz = () => {
     console.log("formattedAnswer:", formattedAnswer);
 
     setAnswer({ ...randomSong, formattedAnswer });
-    setAnswerChoices(shuffledOptions); // use the shuffled version!
+    setAnswerChoices(shuffledOptions); // use the shuffled version
 
     setTimeout(() => {
       setDisableOptions(false);
@@ -190,6 +192,8 @@ const Quiz = () => {
           const randomSong = getRandomSong(songs); //object with song and name properties
           console.log("RANDOMSONG:", randomSong.song);
           setCurrentSong(randomSong.song.id);
+          console.log(randomSong.song.image.url);
+          setCurrentSongImage(randomSong.song.image.url);
 
           //shuffle songs
           const options = getQuizOptions(songs, randomSong);
@@ -209,6 +213,8 @@ const Quiz = () => {
 
     fetchSongs();
   }, []);
+
+  console.log(currentSongImage);
 
   return (
     <form
@@ -236,11 +242,10 @@ const Quiz = () => {
         />
       ) : (
         //if user does not have premium
-        <GuestPlayer
-          currentSong={currentSong}
-          songs={songs}
-          disableOptions={disableOptions}
-          setDisableOptions={setDisableOptions}
+        <img
+          alt="album cover"
+          src={currentSongImage}
+          className="quiz__album-cover"
         />
       )}
       {/* END TERNARY OPERATOR */}
