@@ -84,14 +84,17 @@ const getSavedSongs = () => {
         return []; // Return an empty array
       }
       //map songs
+      console.log("data:", data.items[0].track.album.images[0]);
       let songs = data.items.map((song) => {
+        console.log("songs:", song.track.album.images[0]);
         return {
           name: song.track.name || "Unknown Song",
           artist: song.track.artists[0].name || "Unknown Artist",
           id: song.track.id || "Unknown ID",
+          image: song.track.album.images[0] || "No Album Cover Found",
         };
       });
-      /*  console.log("Song data from Spotify:", songs); */
+      console.log("Song data from Spotify:", songs);
 
       return songs;
     })

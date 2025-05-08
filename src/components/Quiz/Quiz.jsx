@@ -186,6 +186,7 @@ const Quiz = () => {
             songs.map((song) => song)
           );
           console.log(songs.map((song) => song.name));
+          console.log(songs.map((song) => song));
           const randomSong = getRandomSong(songs); //object with song and name properties
           console.log("RANDOMSONG:", randomSong.song);
           setCurrentSong(randomSong.song.id);
@@ -193,7 +194,7 @@ const Quiz = () => {
           //shuffle songs
           const options = getQuizOptions(songs, randomSong);
           console.log("options:", options);
-          console.log("correctSiong:", randomSong.song);
+          console.log("correctSong:", randomSong.song);
           const formattedAnswer = `${randomSong.song.name} - ${randomSong.song.artist}`;
           console.log(formattedAnswer);
           setAnswer({ ...randomSong, formattedAnswer: formattedAnswer });
