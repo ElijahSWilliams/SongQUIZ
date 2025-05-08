@@ -37,7 +37,6 @@ const Quiz = () => {
       spotifyPlayer
         .pause()
         .then(() => {
-          console.log("Submitted");
           setIsPlaying(false);
         })
         .catch((err) => {
@@ -47,7 +46,6 @@ const Quiz = () => {
 
     //if statement to update score
     if (selection === answer.formattedAnswer) {
-      console.log("Choice:", selection);
       setScore((prevScore) => prevScore + 100);
     } else if (selection === null) {
       return; //prevent submission of null answers
@@ -67,7 +65,6 @@ const Quiz = () => {
   const handleAnswerSelect = (e) => {
     const playerSelection = e.target.value;
     setSelection(playerSelection);
-    console.log("selected:", playerSelection);
   };
 
   const handlePlayerReady = (playerInstance) => {
@@ -76,7 +73,7 @@ const Quiz = () => {
   };
 
   const handleNextQuestion = () => {
-    const quizLimit = 5;
+    const quizLimit = 6;
 
     //if currentQuestion is less than quizLimit and currentQuestion is less than the length of the songs array.
     if (currentQuestion < quizLimit && currentQuestion < songs.length - 1) {
@@ -84,8 +81,6 @@ const Quiz = () => {
       setSelection(null); //reset user choice for the next question
       generateNextQuestion(); //get new set of Songs
     } else {
-      console.log("Quiz finished!");
-      /*  setIsStarted(false); */
       // Show results or redirect to end screen
       loadEndScreen();
     }
@@ -99,7 +94,6 @@ const Quiz = () => {
     setSelection(null);
 
     const randomSong = getRandomSong(songs); // pick a song
-    console.log(randomSong.song.image.url);
     setCurrentSong(randomSong.song.id);
     setCurrentSongImage(randomSong.song.image.url);
 
@@ -107,7 +101,6 @@ const Quiz = () => {
     const shuffledOptions = shuffleArray(options); //mix them up
 
     const formattedAnswer = `${randomSong.song.name} - ${randomSong.song.artist}`;
-    console.log("formattedAnswer:", formattedAnswer);
 
     setAnswer({ ...randomSong, formattedAnswer });
     setAnswerChoices(shuffledOptions); // use the shuffled version
@@ -128,7 +121,6 @@ const Quiz = () => {
   //check for subscription status
   useEffect(() => {
     getSubscriptionStatus().then((data) => {
-      /* console.log("Sub Status:", data.product); */
       if (data.product === "premium") {
         setHasPremium(true);
       } else {
@@ -140,12 +132,7 @@ const Quiz = () => {
   //function to get other answer choices
   const getQuizOptions = (songs, randomSong) => {
     //pass in songs and randomSong obecjts
-    /*    console.log("songs from getQuizOptions:", songs);
-    console.log("randomSong from getQuizOptions:", randomSong.song); */
-
-    /* console.log("randomSong +", randomSong); */
     const options = [`${randomSong.song.name} - ${randomSong.song.artist}`]; //put correct song in array
-    console.log("options:", options);
 
     while (options.length < 4) {
       //while options array is less than 4
@@ -155,7 +142,6 @@ const Quiz = () => {
       console.log("otherSong:", otherSong.song);
 
       const otherSongText = `${otherSong.song.name} - ${otherSong.song.artist}`;
-      /*  console.log("songtext:", otherSongText); */
 
       if (!options.includes(otherSongText)) {
         options.push(otherSongText);

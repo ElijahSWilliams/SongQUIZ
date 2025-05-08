@@ -91,7 +91,7 @@ const Player = ({
               .then(() => {
                 console.log("Currently Playing:", currentSong);
                 setIsPlaying(true);
-                handlePause();
+                /* handlePause(); */
               })
               .catch((err) => console.error(err));
           })
@@ -102,12 +102,12 @@ const Player = ({
     }
   };
 
-  const handlePause = () => {
+  /* const handlePause = () => {
     setTimeout(() => {
       player.pause();
       setIsPlaying(false);
     }, 10000);
-  };
+  }; */
   ///////////////////END PLAYBACK CONTROL FUNCTION///////////////////////////////////
   //
 
@@ -137,18 +137,25 @@ const Player = ({
       });
   };
 
+  console.log("IsPlaying:", isPlaying);
+
   return (
     <div className="controls">
-      {/*  <button onClick={() => player?.previousTrack()}>&laquo; Prev</button> */}
       <button
         className="player__playback-btn"
         type="button"
         onClick={togglePlayBack}
-        disabled={isPlaying}
       >
-        {isPlaying ? "Playing..." : "Play"}
+        <img
+          src={
+            isPlaying
+              ? "https://img.icons8.com/ios-filled/100/pause--v1.png"
+              : "https://img.icons8.com/ios-filled/100/play--v1.png"
+          }
+          alt={isPlaying ? "Pause" : "Play"}
+          className="player__icon"
+        />
       </button>
-      {/* <button onClick={() => player?.nextTrack()}>Next &raquo;</button> */}
     </div>
   );
 };

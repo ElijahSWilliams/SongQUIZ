@@ -28,9 +28,10 @@
 
 .quiz__reset-btn {
   width: 55px;
-  height: 25px;
+  height: 22px;
   position: relative;
   margin-top: 85px;
+  margin-left: 50px;
 }
 
 .quiz__options {
