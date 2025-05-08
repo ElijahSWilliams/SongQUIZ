@@ -1,3 +1,10 @@
+.player__playback-btn {
+  border: none;
+  background: transparent;
+  max-width: 40px;
+  max-height: 40px;
+}
+
 .player__icon {
   max-width: 10px;
   max-height: 10px;

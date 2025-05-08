@@ -1,5 +1,4 @@
 import PremiumPlayer from "./PremiumPlayer";
-import GuestPlayer from "./PlayerWrapper";
 
 const PlayerWrapper = ({
   accessToken,

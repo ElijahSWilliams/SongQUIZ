@@ -137,8 +137,6 @@ const Player = ({
       });
   };
 
-  console.log("IsPlaying:", isPlaying);
-
   return (
     <div className="controls">
       <button

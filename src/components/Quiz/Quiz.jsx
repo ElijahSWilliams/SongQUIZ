@@ -4,7 +4,6 @@ import "./Quiz.css";
 import { getSavedSongs } from "../../utils/Api";
 import quizContext from "../../Context/QuizContext";
 import Player from "../Player/Player";
-import GuestPlayer from "../Player/GuestPlayer";
 import Score from "../Score/Score";
 import { accessToken, stopPlayback } from "../../utils/Constants";
 import { getRandomSong } from "../../utils/Constants";
@@ -229,7 +228,7 @@ const Quiz = () => {
       ) : (
         //if user does not have premium
         <img
-          alt="album cover"
+          alt="Album Cover"
           src={currentSongImage}
           className="quiz__album-cover"
         />
