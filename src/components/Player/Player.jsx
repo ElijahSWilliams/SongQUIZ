@@ -17,7 +17,6 @@ const Player = ({
   const [deviceID, setDeviceID] = useState(null);
 
   //UseEffect Hooks
-  console.log(currentSong);
   //initalize the player
   useEffect(() => {
     if (window.Spotify) {
@@ -77,15 +76,18 @@ const Player = ({
   const togglePlayBack = () => {
     if (player && deviceID) {
       console.log("player:", player, "Device ID:", deviceID);
+      console.log("isplaying:", isPlaying);
       if (isPlaying) {
         player.pause().then(() => {
-          console.log("Paused!");
+          console.log("Paused!", isPlaying);
           setIsPlaying(false);
         });
       } else {
+        console.log("RUNNING ON LINE 87");
         //if not playing
         transferPlayback() //tranfer playback to web device
           .then(() => {
+            console.log("SONG:", currentSong);
             // After the playback is transferred, resume with the random song
             playFromBeginning(accessToken, deviceID, currentSong)
               .then(() => {
@@ -123,17 +125,27 @@ const Player = ({
         Authorization: `Bearer ${accessToken}`,
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-        device_ids: [deviceID],
-        play: false,
-      }),
+      body: JSON.stringify({ device_ids: [deviceID], play: true }),
     })
-      .then((res) => {
-        console.log(res);
-        return res.json();
+      .then((response) => {
+        if (response.status === 204 || response.status === 202) {
+          console.log("Playback transferred successfully!");
+          return; // No JSON to parse
+        }
+
+        if (!response.ok) {
+          throw new Error(`Spotify API error: ${response.status}`);
+        }
+
+        return response.json();
+      })
+      .then((data) => {
+        if (data) {
+          console.log("Response data:", data);
+        }
       })
       .catch((err) => {
-        console.log("error tranferring playback:", err);
+        console.error("Error transferring playback:", err);
       });
   };
 

@@ -4,6 +4,7 @@ import { handleRedirect } from "./Auth"; // ✅ your function name
 // Checks fetch response
 export default function checkResponse(res) {
   if (!res.ok) {
+    console.log(res.status);
     if (res.status === 401) {
       console.error("Unauthorized");
       localStorage.removeItem("accessToken");
