@@ -1,92 +1,88 @@
-import { authUrl } from "./Constants";
 import { baseUrl } from "./Constants";
-import { accessToken } from "./Constants";
-import { checkForToken } from "./Auth";
+import { handleRedirect } from "./Auth"; // ✅ your function name
 
-//catch errors or convert to response to json
+// Checks fetch response
 export default function checkResponse(res) {
   if (!res.ok) {
-    //check for 401 error
     if (res.status === 401) {
       console.error("Unauthorized");
       localStorage.removeItem("accessToken");
+      // Optional: redirect to login
     }
     return Promise.reject(`Error: ${res.status}`);
-  } else {
-    return res.json();
   }
+  return res.json();
 }
 
-const getSubscriptionStatus = () => {
+// Get valid token from localStorage or handle PKCE redirect
+async function getToken() {
+  let token = localStorage.getItem("accessToken");
+
+  if (!token) {
+    console.warn(
+      "No access token found. Attempting to handle PKCE redirect..."
+    );
+    token = await handleRedirect(); // ✅ using your function name
+  }
+
+  if (!token) {
+    console.error("Token retrieval failed.");
+    return null;
+  }
+
+  return token;
+}
+
+const getSubscriptionStatus = async () => {
+  const token = await getToken();
+  if (!token) return;
+
   return fetch("https://api.spotify.com/v1/me", {
     headers: {
-      Authorization: `Bearer ${accessToken}`,
+      Authorization: `Bearer ${token}`,
     },
   })
-    .then((res) => {
-      return checkResponse(res);
-    })
+    .then(checkResponse)
     .then((data) => {
       console.log("Subscription Status:", data.product);
       return data;
-      /*  if (data.product === "") */
     });
 };
 
-const getProfileInfo = () => {
-  const token = localStorage.getItem("accessToken");
-  /* console.log("getProfile Token:", token); */
+const getProfileInfo = async () => {
+  const token = await getToken();
+  if (!token) return;
 
-  if (!token) {
-    console.log("Token Unavailable");
-    return;
-  }
-
-  if (token) {
-    return fetch(`${baseUrl}/me`, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`, //include token for authorization
-        "Content-Type": `application/json`,
-      },
-    })
-      .then((res) => {
-        return checkResponse(res);
-      })
-      .then((data) => {
-        /*  console.log("Data:", data);
-        console.log("User Name:", data.display_name); */
-        return data;
-      });
-  } else {
-    console.log("NO TOKEN AVAILABLE");
-    return;
-  }
+  return fetch(`${baseUrl}/me`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+  })
+    .then(checkResponse)
+    .then((data) => data);
 };
 
-const getSavedSongs = () => {
-  checkForToken(accessToken);
+const getSavedSongs = async () => {
+  const token = await getToken();
+  if (!token) return;
 
   return fetch(`${baseUrl}/me/tracks`, {
     method: "GET",
     headers: {
-      Authorization: `Bearer ${accessToken}`,
+      Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",
     },
   })
-    .then((res) => {
-      return checkResponse(res);
-    })
+    .then(checkResponse)
     .then((data) => {
-      //If no data
       if (!data.items.length) {
         console.log("No saved songs found.");
-        return []; // Return an empty array
+        return [];
       }
-      //map songs
-      console.log("data:", data.items[0].track.album.images[0]);
+
       let songs = data.items.map((song) => {
-        console.log("songs:", song.track.album.images[0]);
         return {
           name: song.track.name || "Unknown Song",
           artist: song.track.artists[0].name || "Unknown Artist",
@@ -94,54 +90,51 @@ const getSavedSongs = () => {
           image: song.track.album.images[0] || "No Album Cover Found",
         };
       });
+
       console.log("Song data from Spotify:", songs);
-
       return songs;
-    })
-    .catch((err) => {
-      console.error(err);
-    });
-};
-
-const playSong = (accessToken) => {
-  return fetch(`${baseUrl}/me/player/play`, {
-    method: "PUT",
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-      "Content-Type": "application/json",
-    },
-  })
-    .then((res) => {
-      return checkResponse(res);
-    })
-    .then((data) => {
-      console.log(data);
     })
     .catch((err) => console.error(err));
 };
 
-const playFromBeginning = (accessToken, deviceID, currentSong) => {
-  console.log("PLAYINGGGG", currentSong);
+const playSong = async () => {
+  const token = await getToken();
+  if (!token) return;
+
+  return fetch(`${baseUrl}/me/player/play`, {
+    method: "PUT",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+  })
+    .then(checkResponse)
+    .then((data) => console.log(data))
+    .catch((err) => console.error(err));
+};
+
+const playFromBeginning = async (deviceID, currentSong) => {
+  const token = await getToken();
+  if (!token) return;
+
+  console.log("PLAYING:", currentSong);
+
   return fetch(
     `https://api.spotify.com/v1/me/player/play?device_id=${deviceID}`,
     {
       method: "PUT",
       headers: {
-        Authorization: `Bearer ${accessToken}`,
+        Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        uris: [`spotify:track:${currentSong}`], //play random song
-        position_ms: 0, //start song from beginning
+        uris: [`spotify:track:${currentSong}`],
+        position_ms: 0,
       }),
     }
   )
-    .then((res) => {
-      return checkResponse(res);
-    })
-    .catch((err) => {
-      console.error(err);
-    });
+    .then(checkResponse)
+    .catch((err) => console.error(err));
 };
 
 export {

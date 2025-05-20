@@ -1,41 +1,57 @@
-//File for all things AUTHORIZATION (OAUTH)
 import checkResponse from "./Api";
 import {
   authUrl,
   redirectURI,
   clientID,
-  clientSecret,
   responseType,
   scope,
 } from "./Constants";
 
-const handleSignIn = () => {
-  //start Authentication Process
-  console.log("Signing In");
-  redirectAuth().then((res) => {
-    setIsLoggedIn(true);
-    //call getProfile
-    getProfileInfo().then((userInfo) => {
-      console.log(userInfo);
-      setCurrentUser(userInfo);
-      setLoading(false);
-    });
-  });
+const generateCodeVerifier = (length = 128) => {
+  const possible =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~";
+  let verifier = "";
+  for (let i = 0; i < length; i++) {
+    verifier += possible.charAt(Math.floor(Math.random() * possible.length));
+  }
+  return verifier;
 };
 
-//function to redirect user to spotify auth page
-const redirectAuth = () => {
+const generateCodeChallenge = async (verifier) => {
+  const encoder = new TextEncoder();
+  const data = encoder.encode(verifier);
+  const digest = await crypto.subtle.digest("SHA-256", data);
+  const base64String = btoa(String.fromCharCode(...new Uint8Array(digest)));
+  return base64String
+    .replace(/\+/g, "-")
+    .replace(/\//g, "_")
+    .replace(/=+$/, "");
+};
+
+const redirectAuth = async () => {
+  const codeVerifier = generateCodeVerifier();
+  const codeChallenge = await generateCodeChallenge(codeVerifier);
+
+  localStorage.setItem("pkce_code_verifier", codeVerifier);
+
   const authURL =
-    `${authUrl}authorize?` + // Correct auth URL: https://accounts.spotify.com/authorize
-    `client_id=${clientID}` + // Your Spotify client ID
-    `&response_type=${responseType}` + // response_type=code (for Authorization Code Flow)
-    `&scope=${encodeURIComponent(scope)}` + // The scope, URL-encoded
-    `&redirect_uri=${encodeURIComponent(redirectURI)}`; // The redirect URI, URL-encoded
+    `${authUrl}authorize?` +
+    `client_id=${clientID}` +
+    `&response_type=${responseType}` +
+    `&scope=${encodeURIComponent(scope)}` +
+    `&redirect_uri=${encodeURIComponent(redirectURI)}` +
+    `&code_challenge_method=S256` +
+    `&code_challenge=${codeChallenge}`;
 
-  console.log("Redirecting to:", authURL); // Check the URL being generated
-
-  // Redirect to the Spotify authorization page
+  console.log("Redirecting to:", authURL);
   window.location.href = authURL;
+};
+
+const handleSignIn = () => {
+  console.log("Signing In");
+  redirectAuth().then(() => {
+    console.log("Redirected to Spotify for authentication");
+  });
 };
 
 const checkForToken = (accessToken) => {
@@ -52,12 +68,12 @@ const handleRedirect = async () => {
   if (!code) return null;
 
   try {
-    const tokenData = await tokenExchange(code); // this gets access_token
+    const tokenData = await tokenExchange(code);
     localStorage.setItem("accessToken", tokenData.access_token);
 
-    const userInfo = await getProfileInfo();
+    const userInfo = await getProfileInfo(); // You should define this function in your actual code
 
-    // Clean URL
+    // Clean up URL
     window.history.replaceState({}, document.title, "/");
 
     return userInfo;
@@ -68,17 +84,20 @@ const handleRedirect = async () => {
 };
 
 const tokenExchange = async (authCode) => {
+  const codeVerifier = localStorage.getItem("pkce_code_verifier");
+
   try {
     const response = await fetch("https://accounts.spotify.com/api/token", {
       method: "POST",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
-        Authorization: "Basic " + btoa(`${clientID}:${clientSecret}`),
       },
       body: new URLSearchParams({
+        client_id: clientID,
+        grant_type: "authorization_code",
         code: authCode,
         redirect_uri: redirectURI,
-        grant_type: "authorization_code",
+        code_verifier: codeVerifier,
       }),
     });
 
@@ -86,14 +105,7 @@ const tokenExchange = async (authCode) => {
 
     if (data && data.access_token) {
       localStorage.setItem("accessToken", data.access_token);
-      /* console.log("AccessToken:", data.access_token); */
-
-      // After receiving the token, clear the URL's query parameters
-      window.history.pushState({}, document.title, window.location.pathname); //clean up the URL
-
-      // Redirect to the home page
-      window.location.replace("/"); // Redirects to the home page
-
+      window.history.pushState({}, document.title, window.location.pathname);
       return data;
     } else {
       console.error("Error: No access token received");
