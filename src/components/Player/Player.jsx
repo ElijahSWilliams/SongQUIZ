@@ -15,6 +15,7 @@ const Player = ({
   const [player, setPlayer] = useState(null);
   /* const [isPlaying, setIsPlaying] = useState(""); */
   const [deviceID, setDeviceID] = useState(null);
+  console.log("currentSong in Player:", currentSong);
 
   //UseEffect Hooks
   //initalize the player

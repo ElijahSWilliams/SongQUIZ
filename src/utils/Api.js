@@ -114,8 +114,7 @@ const playSong = async () => {
     .catch((err) => console.error(err));
 };
 
-const playFromBeginning = async (deviceID, currentSong) => {
-  const token = await getToken();
+const playFromBeginning = async (token, deviceID, currentSong) => {
   if (!token) return;
 
   console.log("PLAYING:", currentSong);
@@ -134,7 +133,9 @@ const playFromBeginning = async (deviceID, currentSong) => {
       }),
     }
   )
-    .then(checkResponse)
+    .then((res) => {
+      return checkResponse(res);
+    })
     .catch((err) => console.error(err));
 };
 

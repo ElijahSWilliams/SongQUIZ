@@ -177,6 +177,7 @@ const Quiz = () => {
           const randomSong = getRandomSong(songs); //object with song and name properties
           console.log("RANDOMSONG:", randomSong.song);
           setCurrentSong(randomSong.song.id);
+          console.log("CURRENTSONG line 180:", randomSong.song.id);
           console.log(randomSong.song.image.url);
           setCurrentSongImage(randomSong.song.image.url);
 
@@ -198,6 +199,10 @@ const Quiz = () => {
 
     fetchSongs();
   }, []);
+
+  useEffect(() => {
+    console.log("currentSong Now:", currentSong);
+  });
 
   console.log(currentSongImage);
 
