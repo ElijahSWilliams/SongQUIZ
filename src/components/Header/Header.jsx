@@ -3,7 +3,7 @@ import "./Header.css";
 import quizContext from "../../Context/QuizContext";
 import headerLogo from "../../assets/musicLogo.jpg";
 import { useEffect } from "react";
-import { redirectAuth } from "../../utils/Auth";
+/* import { redirectAuth } from "../../utils/Auth"; */
 import Profile from "../Profile/Profile";
 import { getProfileInfo } from "../../utils/Api";
 import { Routes } from "react-router-dom";
