@@ -1,6 +1,6 @@
 export const authUrl = "https://accounts.spotify.com/";
 
-export const baseUrl = "https://api.spotify.com/v1";
+export const baseUrl = "http://localhost:2002/api";
 
 export const responseType = "code";
 

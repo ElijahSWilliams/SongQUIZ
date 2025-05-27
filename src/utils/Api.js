@@ -1,4 +1,4 @@
-import { baseUrl } from "./Constants";
+import { baseUrl } from "./Constants"; //localhost:2002/api
 import { handleRedirect } from "./Auth"; // ✅ your function name
 
 // Checks fetch response
@@ -54,7 +54,8 @@ const getProfileInfo = async () => {
   const token = await getToken();
   if (!token) return;
 
-  return fetch(`${baseUrl}/me`, {
+  return fetch(`${baseUrl}/profile`, {
+    //baseUrl = localhost:2002/api/profile
     method: "GET",
     headers: {
       Authorization: `Bearer ${token}`,

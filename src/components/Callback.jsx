@@ -5,12 +5,12 @@ import { handleRedirect } from "../utils/Auth";
 import { getProfileInfo } from "../utils/Api";
 
 function Callback() {
-  const { setAccessToken, setCurrentUser, setIsLoggedIn } =
+  const { setAccessToken, currentUser, setCurrentUser, setIsLoggedIn } =
     useContext(quizContext);
 
   const navigate = useNavigate();
 
-  /*  useEffect(() => {
+  useEffect(() => {
     const completeAuth = async () => {
       const data = await handleRedirect();
       const token = localStorage.getItem("accessToken");
@@ -35,7 +35,11 @@ function Callback() {
 
     completeAuth();
   }, []);
- */
+
+  useEffect(() => {
+    console.log(currentUser);
+  }, [currentUser]);
+
   return <p>Logging you in...</p>;
 }
 
