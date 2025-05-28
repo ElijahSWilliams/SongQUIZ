@@ -38,3 +38,11 @@
   cursor: pointer;
   /* white-space: nowrap; */
 }
+
+.header__home-btn {
+  background: none;
+  border: none;
+  width: 100px;
+  height: 82px;
+  cursor: pointer;
+}

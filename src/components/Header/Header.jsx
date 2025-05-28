@@ -3,8 +3,6 @@ import "./Header.css";
 import quizContext from "../../Context/QuizContext";
 import headerLogo from "../../assets/musicLogo.jpg";
 import { useEffect } from "react";
-/* import { redirectAuth } from "../../utils/Auth"; */
-import Profile from "../Profile/Profile";
 import { getProfileInfo } from "../../utils/Api";
 import { Routes } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
@@ -31,7 +29,6 @@ const Header = () => {
       getProfileInfo()
         .then((userInfo) => {
           setCurrentUser(userInfo);
-          /* console.log("CurrentUSER:", userInfo); */
         })
         .finally(() => {
           setLoading(false);
@@ -47,14 +44,21 @@ const Header = () => {
     <>
       {loading ? null : (
         <header className="header">
-          <img className="header__logo" src={headerLogo} />
+          <button
+            className="header__home-btn"
+            onClick={() => {
+              navigate("/");
+            }}
+          >
+            <img className="header__logo" src={headerLogo} />
+          </button>
           {!isLoggedIn ? (
             <button className="header__login-btn" onClick={handleSignIn}>
               Sign In With Spotify
             </button>
           ) : (
             <button
-              className=""
+              className="header__profile-btn"
               onClick={() => {
                 navigate("/about");
               }}
