@@ -263,14 +263,15 @@ const Quiz = () => {
       ) : (
         <p className="quiz__options">Getting Songs...</p>
       )}
+      <div className="quiz__buttons">
+        <button className="quiz__submit-btn" type="submit">
+          Submit
+        </button>
 
-      <button className="quiz__submit-btn" type="submit">
-        Submit
-      </button>
-
-      <button className="quiz__reset-btn" onClick={handleResetQuiz}>
-        Reset
-      </button>
+        <button className="quiz__reset-btn" onClick={handleResetQuiz}>
+          Reset
+        </button>
+      </div>
 
       {activeModal === "endModal" && (
         <EndModal
