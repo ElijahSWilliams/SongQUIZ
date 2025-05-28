@@ -40,18 +40,6 @@ const Header = () => {
       setLoading(false);
     }
   }, []);
-  /* 
-  useEffect(() => {
-    let logoutTimer;
-
-    if (isLoggedIn) {
-      logoutTimer = setTimeout(() => {
-        signOut();
-      }, 60 * 60 * 1000); // 1 hour
-    }
-
-    return () => clearTimeout(logoutTimer); // Cleanup
-  }, [isLoggedIn]); */
 
   if (loading) return null; //early exit if data is still loading
 
@@ -65,7 +53,14 @@ const Header = () => {
               Sign In With Spotify
             </button>
           ) : (
-            <Profile />
+            <button
+              className=""
+              onClick={() => {
+                navigate("/about");
+              }}
+            >
+              Open Profile
+            </button>
           )}
         </header>
       )}

@@ -8,6 +8,7 @@ import { getProfileInfo } from "../../utils/Api";
 import { useNavigate } from "react-router-dom";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Callback from "../Callback";
+import Profile from "../Profile/Profile";
 
 function App() {
   //state variables
@@ -118,6 +119,7 @@ function App() {
         <Header />
         <Routes>
           <Route path="/callback" element={<Callback />} />
+          <Route path="/about" element={<Profile />} />
         </Routes>
         <Entry />
         {activeModal === "endModal" && (
