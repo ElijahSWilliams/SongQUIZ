@@ -68,9 +68,10 @@ const getProfileInfo = async () => {
 
 const getSavedSongs = async () => {
   const token = await getToken();
+  console.log(token);
   if (!token) return;
 
-  return fetch(`${baseUrl}/me/tracks`, {
+  return fetch(`${baseUrl}/tracks`, {
     method: "GET",
     headers: {
       Authorization: `Bearer ${token}`,
