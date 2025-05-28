@@ -47,3 +47,19 @@
   height: 82px;
   cursor: pointer;
 }
+
+@media (max-width: 320px) {
+  .header__logo {
+    max-width: 60px;
+    max-height: 60px;
+  }
+
+  .header__profile-btn {
+    max-width: 90px;
+    max-height: 100px;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    flex-wrap: wrap;
+  }
+}
