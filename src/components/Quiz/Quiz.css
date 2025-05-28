@@ -42,10 +42,11 @@
 }
 
 .quiz__options li {
-  margin-bottom: 15px;
-  margin-left: 270px;
+  /*   margin-bottom: 15px;
+  margin-left: 270px; */
   display: flex;
   align-items: center;
+  justify-content: center;
 }
 
 .quiz__album-cover {

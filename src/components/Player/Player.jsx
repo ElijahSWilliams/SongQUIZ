@@ -20,23 +20,22 @@ const Player = ({
   //UseEffect Hooks
   //initalize the player
   useEffect(() => {
-    if (window.Spotify) {
-      console.log("Spotify SDK:", window.Spotify);
+    if (!accessToken) return;
+
+    window.onSpotifyWebPlaybackSDKReady = () => {
       const spotifyPlayer = new window.Spotify.Player({
         name: "Song Quiz",
         getOAuthToken: (cb) => cb(accessToken),
         volume: 0.5,
-        robustness: "max",
       });
 
       setPlayer(spotifyPlayer);
 
-      // web player event listeners
+      // Listeners
       spotifyPlayer.addListener("ready", ({ device_id }) => {
         console.log("Player is ready with Device ID:", device_id);
         setDeviceID(device_id);
-
-        transferPlayback(); //automatically transfer playback when player sends 'ready' event
+        transferPlayback(); // now safe to call
       });
 
       spotifyPlayer.addListener("not_ready", ({ device_id }) => {
@@ -45,32 +44,32 @@ const Player = ({
 
       spotifyPlayer.addListener("player_state_changed", (state) => {
         console.log("Player state changed:", state);
-        console.log("State:", state.context.uri);
       });
 
-      spotifyPlayer.addListener("initialization_error", ({ message }) => {
-        console.error(message);
-      });
+      spotifyPlayer.addListener("initialization_error", ({ message }) =>
+        console.error(message)
+      );
+      spotifyPlayer.addListener("authentication_error", ({ message }) =>
+        console.error(message)
+      );
+      spotifyPlayer.addListener("account_error", ({ message }) =>
+        console.error(message)
+      );
 
-      spotifyPlayer.addListener("authentication_error", ({ message }) => {
-        console.error(message);
-      });
-
-      spotifyPlayer.addListener("account_error", ({ message }) => {
-        console.error(message);
-      });
-
-      //call connect to
       spotifyPlayer.connect().then((success) => {
         if (success) {
           console.log("Player Connected!");
-          onPlayerReady(spotifyPlayer); //pass as prop to quiz component
+          onPlayerReady(spotifyPlayer);
         }
       });
-    } else {
-      console.error("Spotify SDK not loaded yet.");
+    };
+
+    // Fallback if SDK is already loaded
+    if (window.Spotify) {
+      window.onSpotifyWebPlaybackSDKReady();
     }
-  }, [accessToken]); // Runs only if accessToken changes
+  }, [accessToken]);
+  // Runs only if accessToken changes
   ///////////////END INITIALIZE PLAYER/////////////////////////////////////
 
   // Function to handle playback
