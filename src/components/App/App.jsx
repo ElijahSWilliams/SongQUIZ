@@ -120,8 +120,8 @@ function App() {
         <Routes>
           <Route path="/callback" element={<Callback />} />
           <Route path="/about" element={<Profile />} />
+          <Route path="/" element={<Entry />} />
         </Routes>
-        <Entry />
         {activeModal === "endModal" && (
           <EndModal
             activeModal={activeModal}
