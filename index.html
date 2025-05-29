@@ -5,11 +5,16 @@
     <link rel="icon" type="image/svg+xml" href="" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Spotify Song Quiz</title>
-    <script type="module" crossorigin src="/SongQUIZ/assets/index-C3IGyQJq.js"></script>
-    <link rel="stylesheet" crossorigin href="/SongQUIZ/assets/index-CnCi0hwm.css">
+    <script type="module" crossorigin src="/SongQUIZ/assets/index-DV6qo5Mf.js"></script>
+    <link rel="stylesheet" crossorigin href="/SongQUIZ/assets/index-Dqz_7y-D.css">
   </head>
   <body>
     <div id="root"></div>
+    <script>
+      window.onSpotifyWebPlaybackSDKReady = () => {
+        console.log("Spotify SDK is ready!");
+      };
+    </script>
     <script src="https://sdk.scdn.co/spotify-player.js"></script>
   </body>
 </html>
