@@ -177,6 +177,7 @@ const Quiz = () => {
           const randomSong = getRandomSong(songs); //object with song and name properties
           console.log("RANDOMSONG:", randomSong.song);
           setCurrentSong(randomSong.song.id);
+          console.log("CURRENTSONG line 180:", randomSong.song.id);
           console.log(randomSong.song.image.url);
           setCurrentSongImage(randomSong.song.image.url);
 
@@ -198,6 +199,10 @@ const Quiz = () => {
 
     fetchSongs();
   }, []);
+
+  useEffect(() => {
+    console.log("currentSong Now:", currentSong);
+  });
 
   console.log(currentSongImage);
 
@@ -258,14 +263,15 @@ const Quiz = () => {
       ) : (
         <p className="quiz__options">Getting Songs...</p>
       )}
+      <div className="quiz__buttons">
+        <button className="quiz__submit-btn" type="submit">
+          Submit
+        </button>
 
-      <button className="quiz__submit-btn" type="submit">
-        Submit
-      </button>
-
-      <button className="quiz__reset-btn" onClick={handleResetQuiz}>
-        Reset
-      </button>
+        <button className="quiz__reset-btn" onClick={handleResetQuiz}>
+          Reset
+        </button>
+      </div>
 
       {activeModal === "endModal" && (
         <EndModal

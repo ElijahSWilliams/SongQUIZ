@@ -2,12 +2,13 @@ import { useEffect, useState } from "react";
 import "./App.css";
 import quizContext from "../../Context/QuizContext";
 import Entry from "../Entry/Entry";
-import Score from "../Score/Score";
 import Header from "../Header/Header";
 import { handleRedirect } from "../../utils/Auth";
 import { getProfileInfo } from "../../utils/Api";
 import { useNavigate } from "react-router-dom";
-import QuizEndModal from "../QuizEndModal/QuizEndModal";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Callback from "../Callback";
+import Profile from "../Profile/Profile";
 
 function App() {
   //state variables
@@ -22,8 +23,7 @@ function App() {
   const ONE_HOUR = 60 * 60 * 1000; //variable for an hour timer
   const navigate = useNavigate();
 
-  //FUNCTIONS 
-  
+  //FUNCTIONS
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -117,8 +117,11 @@ function App() {
     >
       <div className="page">
         <Header />
-        {/* <Score /> */}
-        <Entry />
+        <Routes>
+          <Route path="/callback" element={<Callback />} />
+          <Route path="/about" element={<Profile />} />
+          <Route path="/" element={<Entry />} />
+        </Routes>
         {activeModal === "endModal" && (
           <EndModal
             activeModal={activeModal}

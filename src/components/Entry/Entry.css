@@ -1,10 +1,18 @@
 .entry {
-  text-align: center;
+  display: flex;
+  justify-content: center; /* centers horizontally */
+  align-items: center; /* centers vertically */
+  height: 100vh;
 }
 
 .entry__play-btn {
-  margin-top: 350px;
   border-radius: 10px;
   width: 250px;
   padding: 5px;
+}
+
+@media (max-width: 320px) {
+  .entry__play-btn {
+    max-width: 170px;
+  }
 }

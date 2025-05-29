@@ -1,54 +1,67 @@
 .quiz {
-  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 95px;
   text-align: center;
   background-color: rgb(213, 208, 208, 0.25);
   max-width: 800px;
-  position: relative;
-  left: 320px;
-  top: 125px;
   border-radius: 10px;
   width: 800px;
-  height: 400px;
+  height: 450px;
   backdrop-filter: blur(25px);
-
-  /* Animation */
-  /*   opacity: 0; */
-  transform: scale(0.95);
-  transition: opacity 0.8s ease-in-out;
-}
-
-.quiz__visible {
-  opacity: 1;
-  /*   transform: scale(1); */
 }
 
 .quiz__header {
-  margin: 0;
+  margin-bottom: 2px;
 }
 
 .quiz__reset-btn {
   width: 55px;
   height: 22px;
-  position: relative;
-  margin-top: 85px;
-  margin-left: 50px;
+  border-radius: 10px;
+  border: none;
+}
+
+.quiz__submit-btn {
+  width: 55px;
+  height: 22px;
+  border-radius: 10px;
+  border: none;
 }
 
 .quiz__options {
-  margin: 10px -10px;
+  /*  margin: 10px -10px; */
   /* margin-top: 40px; */
   list-style-type: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
   /*  margin-left: -85px;  */
 }
 
 .quiz__options li {
-  margin-bottom: 15px;
-  margin-left: 270px;
+  /*   margin-bottom: 15px;
+  margin-left: 270px; */
   display: flex;
   align-items: center;
+  justify-content: center;
 }
 
 .quiz__album-cover {
   max-width: 90px;
   max-height: 90px;
+}
+
+.quiz__buttons {
+  display: flex;
+  justify-content: center;
+  column-gap: 10px;
+}
+
+@media (max-width: 768px) {
+  .quiz {
+    max-height: 400px;
+    margin-bottom: 50px;
+  }
 }

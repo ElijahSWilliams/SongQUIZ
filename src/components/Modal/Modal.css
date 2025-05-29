@@ -37,6 +37,18 @@
   font-size: 20px;
 }
 
+.modal__close-btn {
+  background: none;
+  background-image: url("../../assets/closebutton.svg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  border: none;
+  max-width: 10px;
+  position: absolute;
+  top: 3px;
+  right: 15px;
+}
+
 .modal__logout-btn {
   /* position: relative;
   left: 365px;

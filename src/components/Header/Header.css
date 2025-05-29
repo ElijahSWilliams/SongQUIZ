@@ -3,7 +3,7 @@
   align-items: center;
   justify-content: space-between;
   /* padding: 32px 0px 28px; */
-  font-family: "Cabinet Grotesk";
+  font-family: "Roboto Condensed", sans-serif;
   font-size: 20px;
   font-weight: 700;
   line-height: 24px;
@@ -35,6 +35,31 @@
   height: 70px;
   color: white;
   font-size: 20px;
+  /* font-family: "/src/assets/fonts/Roboto_Condensed/static/RobotoCondensed-Italic.ttf"; */
   cursor: pointer;
   /* white-space: nowrap; */
+}
+
+.header__home-btn {
+  background: none;
+  border: none;
+  width: 100px;
+  height: 82px;
+  cursor: pointer;
+}
+
+@media (max-width: 320px) {
+  .header__logo {
+    max-width: 60px;
+    max-height: 60px;
+  }
+
+  .header__profile-btn {
+    max-width: 90px;
+    max-height: 100px;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    flex-wrap: wrap;
+  }
 }

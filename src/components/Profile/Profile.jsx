@@ -1,11 +1,10 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Profile.css";
 import quizContext from "../../Context/QuizContext";
 import LogOutModal from "../Modal/Modal";
 
 const Profile = () => {
-  //import userContext
   const { isLoggedIn, setIsLoggedIn, currentUser, setCurrentUser } =
     useContext(quizContext);
   const [activeModal, setActiveModal] = useState("");
@@ -13,7 +12,6 @@ const Profile = () => {
   const navigate = useNavigate();
 
   const handleOpenLogoutModal = () => {
-    console.log("Log Out Modal");
     setActiveModal("logout");
   };
 
@@ -22,29 +20,49 @@ const Profile = () => {
   };
 
   const handleLogOut = () => {
-    let token = localStorage.getItem("accessToken");
+    const token = localStorage.getItem("accessToken");
 
     if (token) {
-      console.log(token);
+      console.log("Logging out with token:", token);
     } else {
-      console.log("No Token FOund");
+      console.log("No token found");
     }
+
     setCurrentUser(null);
     setIsLoggedIn(false);
-    localStorage.removeItem("accessToken"); // remove from local storage
-    console.log("User logged out"); //debugging
-    navigate("/"); // Redirect to home page '/' using router
+    localStorage.removeItem("accessToken");
+    console.log("User logged out");
+    navigate("/");
     handleCloseModal();
   };
 
-  //Modal
-
   return (
     <div className="profile">
-      <button className="profile__btn" onClick={handleOpenLogoutModal}>
-        {currentUser?.display_name}
+      <h2 className="profile__title">Profile</h2>
+
+      {currentUser ? (
+        <div className="profile__info">
+          <p>
+            <h2 className="profile__info_name">Name:</h2>{" "}
+            {currentUser.display_name}
+          </p>
+          <p>
+            <h2 className="profile__info-email">Email:</h2>{" "}
+            {currentUser.email || "Not available"}
+          </p>
+          {/* Add more info if available, like profile pic, etc. */}
+        </div>
+      ) : (
+        <p>No user info available.</p>
+      )}
+
+      <button
+        className="profile__logout-btn logout"
+        onClick={handleOpenLogoutModal}
+      >
+        Log Out
       </button>
-      {/* Show when logout is active */}
+
       <LogOutModal
         activeModal={activeModal}
         handleCloseModal={handleCloseModal}

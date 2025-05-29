@@ -13,6 +13,7 @@ function QuizEndModal({
     return "😅 Yikes… Better Luck Next Time?";
   };
 
+  //submit branch change
   return (
     <div
       className={`modal ${activeModal === "endModal" ? "modal__opened" : ""} `}
