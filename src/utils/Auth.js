@@ -1,6 +1,8 @@
+import { baseURL } from "./Constants";
+
 const handleSignIn = () => {
   console.log("Redirecting to backend /login route");
-  window.location.href = "http://localhost:2002/auth/login"; // Backend starts Spotify OAuth
+  window.location.href = `${baseURL}/auth/login`; // Backend starts Spotify OAuth
 };
 
 const handleRedirect = async () => {
@@ -10,7 +12,7 @@ const handleRedirect = async () => {
   if (!code) return;
 
   try {
-    const response = await fetch("http://localhost:2002/auth/token", {
+    const response = await fetch(`${baseURL}/auth/token`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
