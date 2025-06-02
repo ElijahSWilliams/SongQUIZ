@@ -9,7 +9,10 @@ export const accessToken = localStorage.getItem("accessToken"); //get token from
 export const scope =
   "user-library-read user-read-private user-read-email user-read-playback-state user-modify-playback-state streaming";
 
-export const redirectURI = "http://localhost:2002/";
+export const redirectURI =
+  process.env.NODE_ENV === "production"
+    ? "https://songquiz.pii.at/callback"
+    : "http://localhost:2001/callback";
 
 export const getRandomSong = (songs) => {
   if (!songs || songs.length === 0) return null; // Safety check
