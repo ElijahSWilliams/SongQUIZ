@@ -1,6 +1,6 @@
 export const authUrl = "https://accounts.spotify.com/";
 
-export const baseURL =
+export const baseUrl =
   window.location.hostname === "localhost"
     ? "http://localhost:2002"
     : "https://api.songquiz.pii.at";
