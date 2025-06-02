@@ -14,7 +14,7 @@ export const scope =
 
 export const redirectURI =
   process.env.NODE_ENV === "production"
-    ? "https://songquiz.pii.at/callback"
+    ? "https://api.songquiz.pii.at/callback"
     : "http://localhost:2001/callback";
 
 export const getRandomSong = (songs) => {
