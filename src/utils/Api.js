@@ -23,7 +23,7 @@ async function getToken() {
     console.warn(
       "No access token found. Attempting to handle PKCE redirect..."
     );
-    token = await handleRedirect(); // ✅ using your function name
+    token = await handleRedirect(); //
   }
 
   if (!token) {

@@ -1,9 +1,9 @@
 export const authUrl = "https://accounts.spotify.com/";
 
 export const baseUrl =
-process.env.NODE_ENV === "development"
+  process.env.NODE_ENV === "development"
     ? "http://localhost:2002"
-    : "https://api.songquiz.pii.at";
+    : "https://elijahswilliams.github.io/SongQUIZ/";
 
 export const responseType = "code";
 
