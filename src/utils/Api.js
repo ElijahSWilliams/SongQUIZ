@@ -71,7 +71,7 @@ const getSavedSongs = async () => {
   console.log(token);
   if (!token) return;
 
-  return fetch(`${baseUrl}/tracks`, {
+  return fetch(`${baseUrl}/api/tracks`, {
     method: "GET",
     headers: {
       Authorization: `Bearer ${token}`,
@@ -104,7 +104,7 @@ const playSong = async () => {
   const token = await getToken();
   if (!token) return;
 
-  return fetch(`${baseUrl}/me/player/play`, {
+  return fetch(`${baseUrl}/api/me/player/play`, {
     method: "PUT",
     headers: {
       Authorization: `Bearer ${token}`,
