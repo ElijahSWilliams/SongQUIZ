@@ -3,7 +3,7 @@ export const authUrl = "https://accounts.spotify.com/";
 export const baseUrl =
   process.env.NODE_ENV === "development"
     ? "http://localhost:2002"
-    : "https://elijahswilliams.github.io/SongQUIZ/";
+    : "https://api.songquiz.pii.at";
 
 export const responseType = "code";
 
@@ -14,7 +14,7 @@ export const scope =
 
 export const redirectURI =
   process.env.NODE_ENV === "production"
-    ? "https://api.songquiz.pii.at/callback"
+    ? "https://elijahswilliams.github.io/SongQUIZ/" //live server
     : "http://localhost:2001/callback";
 
 export const getRandomSong = (songs) => {
