@@ -1,4 +1,4 @@
-import { baseUrl } from "./Constants"; //localhost:2002/api
+import { baseUrl } from "./Constants"; //localhost:2002/api or https://api.songquiz.pii.at
 import { handleRedirect } from "./Auth"; // ✅ your function name
 
 // Checks fetch response
@@ -54,7 +54,7 @@ const getProfileInfo = async () => {
   const token = await getToken();
   if (!token) return;
 
-  return fetch(`${baseUrl}/profile`, {
+  return fetch(`${baseUrl}/api`, {
     //baseUrl = localhost:2002/api/profile
     method: "GET",
     headers: {
