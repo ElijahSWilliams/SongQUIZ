@@ -6,7 +6,7 @@ import { HashRouter } from "react-router-dom";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <HashRouter basename="/SongQuiz">
+    <HashRouter>
       <App />
     </HashRouter>
   </StrictMode>

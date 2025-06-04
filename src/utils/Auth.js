@@ -27,7 +27,7 @@ const handleRedirect = async () => {
       localStorage.setItem("refreshToken", data.refresh_token);
 
       // Clean the URL
-      window.history.replaceState({}, document.title, "/");
+      window.history.replaceState({}, document.title, "/SongQUIZ/");
 
       return data;
     } else {
