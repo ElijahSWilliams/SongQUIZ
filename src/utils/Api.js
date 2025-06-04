@@ -54,7 +54,7 @@ const getProfileInfo = async () => {
   const token = await getToken();
   if (!token) return;
 
-  return fetch(`${baseUrl}/api`, {
+  return fetch(`${baseUrl}/api/profile`, {
     //baseUrl = localhost:2002/api/profile
     method: "GET",
     headers: {
